@@ -4,6 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CorpusExplorer.Core.DocumentProcessing.Tagger.RawText;
+using CorpusExplorer.Sdk.Utils.DocumentProcessing.Builder;
+using CorpusExplorer.Sdk.Utils.DocumentProcessing.Cleanup;
 
 namespace myFilterBubble.Sdk.Watcher.Abstract
 {
@@ -113,7 +116,37 @@ namespace myFilterBubble.Sdk.Watcher.Abstract
       ParseFile(fileSystemEventArgs.FullPath, GetModelPath(fileSystemEventArgs.FullPath));
     }
 
-    protected abstract void ParseFile(string filePath, string modelPath);
+    private void ParseFile(string filePath, string modelPath)
+    {
+      List<Dictionary<string, object>> pages;
+      Dictionary<string, object> cmeta;
+
+      ReadFile(filePath, out pages, out cmeta);
+
+      var cleanup = new StandardCleanup();
+      foreach (var page in pages)
+        cleanup.Input.Enqueue(page);
+
+      cleanup.Execute();
+
+      var tagger = new RawTextTagger
+      {
+        Input = cleanup.Output,
+        CorpusBuilder = new CorpusBuilderWriteDirect()
+      };
+      tagger.Execute();
+
+      var model = tagger.Output.FirstOrDefault();
+      if (model == null)
+        return;
+
+      foreach (var m in cmeta)
+        model.SetCorpusMetadata(m.Key, m.Value);
+
+      model.Save(modelPath, false);
+    }
+
+    protected abstract void ReadFile(string filePath, out List<Dictionary<string, object>> pages, out Dictionary<string, object> cmeta);
 
     private string GetModelPath(string watchPath)
     {
@@ -121,7 +154,12 @@ namespace myFilterBubble.Sdk.Watcher.Abstract
       while (watchPath.StartsWith(@"\"))
         watchPath = watchPath.Substring(1);
 
-      return Path.Combine(_path2Model, watchPath);
+      var res = Path.Combine(_path2Model, watchPath);
+      var dir = Path.GetDirectoryName(res);
+      if (!Directory.Exists(dir))
+        Directory.CreateDirectory(dir);
+
+      return res;
     }
   }
 }
