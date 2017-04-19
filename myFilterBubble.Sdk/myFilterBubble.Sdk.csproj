@@ -55,6 +55,9 @@
     <Compile Include="Watcher\PdfWatcher.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Model\de-DE\qsearch.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

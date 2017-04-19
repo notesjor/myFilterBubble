@@ -19,8 +19,10 @@ namespace myFilterBubble.Sdk.Watcher
   {
     public PdfWatcher(string path2Watch) : base(path2Watch) { }
 
+    public PdfWatcher(string path2Watch, string bubbleId) : base(path2Watch, bubbleId) { }
+
     public override string Filter => "*.pdf";
-    
+
     protected override void ReadFile(
       string filePath,
       out List<Dictionary<string, object>> pages,
@@ -29,17 +31,25 @@ namespace myFilterBubble.Sdk.Watcher
       pages = new List<Dictionary<string, object>>();
       cmeta = new Dictionary<string, object> { { "FILE", filePath } };
 
+      var last = 0;
+
       using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
       {
         var pdfReader = new PdfReader(fs);
 
         var strategy = new SimpleTextExtractionStrategy();
         for (var i = 0; i < pdfReader.NumberOfPages; i++)
+        {
+          var tmp = PdfTextExtractor.GetTextFromPage(pdfReader, i + 1, strategy);
+          var text = tmp.Substring(last);
+          last = tmp.Length;
+
           pages.Add(new Dictionary<string, object>
           {
-            {"Text", PdfTextExtractor.GetTextFromPage(pdfReader, i + 1, strategy)},
+            {"Text", text},
             {"PAGE", i }
           });
+        }
 
         foreach (var info in pdfReader.Info)
           if (!cmeta.ContainsKey(info.Key))
