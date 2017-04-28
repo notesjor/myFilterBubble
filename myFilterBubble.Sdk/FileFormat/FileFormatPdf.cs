@@ -1,29 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CorpusExplorer.Core.DocumentProcessing.Tagger.RawText;
-using CorpusExplorer.Sdk.Utils.DocumentProcessing.Cleanup;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
-using myFilterBubble.Sdk.Watcher.Abstract;
-using CorpusExplorer.Sdk.Helper;
-using CorpusExplorer.Sdk.Utils.DocumentProcessing.Builder;
 
-namespace myFilterBubble.Sdk.Watcher
+namespace myFilterBubble.Sdk
 {
-  [Serializable]
-  public class PdfWatcher : AbstractWatcher
+  public class FileFormatPdf : AbstractFileFormat
   {
-    public PdfWatcher(string path2Watch) : base(path2Watch) { }
+    protected override string[] FileExtensions => new[] {".pdf"};
 
-    public PdfWatcher(string path2Watch, string bubbleId) : base(path2Watch, bubbleId) { }
-
-    public override string Filter => "*.pdf";
-
-    protected override void ReadFile(
+    public override void ReadFile(
       string filePath,
       out List<Dictionary<string, object>> pages,
       out Dictionary<string, object> cmeta)

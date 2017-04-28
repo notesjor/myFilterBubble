@@ -49,10 +49,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileFormat\Abstract\AbstractFileFormat.cs" />
+    <Compile Include="Helper\LanguageDetectorHelper.cs" />
+    <Compile Include="Repository\FileFormatRepository.cs" />
+    <Compile Include="Repository\VectorLanguageModelRepository.cs" />
+    <Compile Include="Source\Abstract\AbstractSource.cs" />
+    <Compile Include="FileFormat\FileFormatPdf.cs" />
+    <Compile Include="FilterBubble.cs" />
+    <Compile Include="Features\FilterBubbleIndexBuilder.cs" />
+    <Compile Include="Features\FilterBubbleIndexWatchdog.cs" />
+    <Compile Include="Features\FilterBubbleSearchIndex.cs" />
+    <Compile Include="Source\LocalFolderSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Watcher\Abstract\AbstractWatcher.cs" />
-    <Compile Include="Watcher\Manager\WatcherManager.cs" />
-    <Compile Include="Watcher\PdfWatcher.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Model\de-DE\qsearch.csv">
@@ -78,5 +86,6 @@
       <Name>CorpusExplorer.Sdk</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
