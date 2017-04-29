@@ -52,7 +52,7 @@
     <Compile Include="FileFormat\Abstract\AbstractFileFormat.cs" />
     <Compile Include="Helper\LanguageDetectorHelper.cs" />
     <Compile Include="Repository\FileFormatRepository.cs" />
-    <Compile Include="Repository\VectorLanguageModelRepository.cs" />
+    <Compile Include="Repository\LanguageVectorModelRepository.cs" />
     <Compile Include="Source\Abstract\AbstractSource.cs" />
     <Compile Include="FileFormat\FileFormatPdf.cs" />
     <Compile Include="FilterBubble.cs" />

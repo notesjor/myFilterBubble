@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 
 namespace myFilterBubble.Sdk.Repository {
-  public static class VectorLanguageModelRepository
+  public static class LanguageVectorModelRepository
   {
-    public static Dictionary<string, double> GetVectorLanguageModel(string languageCode)
+    public static Dictionary<string, double> GetModel(string languageCode)
     {
       return File.ReadAllLines($"Model/{languageCode}/qsearch.csv")
                  .Select(line => line.Split(new[] { "\t" }, StringSplitOptions.RemoveEmptyEntries))
