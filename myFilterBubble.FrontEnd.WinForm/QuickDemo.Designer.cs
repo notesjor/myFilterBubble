@@ -54,6 +54,8 @@
       this.btn_doc_next = new System.Windows.Forms.Button();
       this.btn_doc_prev = new System.Windows.Forms.Button();
       this.label3 = new System.Windows.Forms.Label();
+      this.radio_insentence = new System.Windows.Forms.RadioButton();
+      this.radio_phrase = new System.Windows.Forms.RadioButton();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.groupBox3.SuspendLayout();
@@ -144,6 +146,8 @@
       // groupBox3
       // 
       this.groupBox3.Controls.Add(this.radio_similarity);
+      this.groupBox3.Controls.Add(this.radio_phrase);
+      this.groupBox3.Controls.Add(this.radio_insentence);
       this.groupBox3.Controls.Add(this.radio_contains);
       this.groupBox3.Dock = System.Windows.Forms.DockStyle.Top;
       this.groupBox3.Location = new System.Drawing.Point(0, 100);
@@ -157,7 +161,7 @@
       // 
       this.radio_similarity.AutoSize = true;
       this.radio_similarity.Dock = System.Windows.Forms.DockStyle.Left;
-      this.radio_similarity.Location = new System.Drawing.Point(83, 16);
+      this.radio_similarity.Location = new System.Drawing.Point(249, 16);
       this.radio_similarity.Name = "radio_similarity";
       this.radio_similarity.Size = new System.Drawing.Size(85, 31);
       this.radio_similarity.TabIndex = 1;
@@ -349,6 +353,28 @@
       this.label3.TabIndex = 1;
       this.label3.Text = "DOCUMENT";
       // 
+      // radio_insentence
+      // 
+      this.radio_insentence.AutoSize = true;
+      this.radio_insentence.Dock = System.Windows.Forms.DockStyle.Left;
+      this.radio_insentence.Location = new System.Drawing.Point(83, 16);
+      this.radio_insentence.Name = "radio_insentence";
+      this.radio_insentence.Size = new System.Drawing.Size(97, 31);
+      this.radio_insentence.TabIndex = 2;
+      this.radio_insentence.Text = "IN-SENTENCE";
+      this.radio_insentence.UseVisualStyleBackColor = true;
+      // 
+      // radio_phrase
+      // 
+      this.radio_phrase.AutoSize = true;
+      this.radio_phrase.Dock = System.Windows.Forms.DockStyle.Left;
+      this.radio_phrase.Location = new System.Drawing.Point(180, 16);
+      this.radio_phrase.Name = "radio_phrase";
+      this.radio_phrase.Size = new System.Drawing.Size(69, 31);
+      this.radio_phrase.TabIndex = 3;
+      this.radio_phrase.Text = "PHRASE";
+      this.radio_phrase.UseVisualStyleBackColor = true;
+      // 
       // QuickDemo
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -406,6 +432,8 @@
     private System.Windows.Forms.Button btn_doc_next;
     private System.Windows.Forms.Button btn_doc_prev;
     private System.Windows.Forms.Label label3;
+    private System.Windows.Forms.RadioButton radio_phrase;
+    private System.Windows.Forms.RadioButton radio_insentence;
   }
 }
 

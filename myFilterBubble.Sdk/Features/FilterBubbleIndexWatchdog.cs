@@ -14,13 +14,9 @@ namespace myFilterBubble.Sdk {
       _watches = new List<FileSystemWatcher>();
       foreach (var source in filterBubble.Sources)
       {
-        var lfs = source as LocalFolderSource;
-        if (lfs == null)
-          continue;
-
         var w = new FileSystemWatcher
         {
-          Path = lfs.FolderPath,
+          Path = source,
           Filter = "*.*",
           IncludeSubdirectories = true
         };

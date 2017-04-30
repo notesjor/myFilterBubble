@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -14,12 +15,15 @@ namespace myFilterBubble.FrontEnd.WinForm
   public partial class QuickDemo : Form
   {
     private FilterBubble _bubble;
+    private FilterBubbleSearchIndex _search;
 
     public QuickDemo()
     {
       InitializeComponent();
       _bubble = new FilterBubble("Test", Guid.Parse("65bed36eaf8541bea885062d295a4b94"));
-      _bubble.Add(new LocalFolderSource {FolderPath = @"C:\Indexed"});
+      _bubble.Add(@"C:\Indexed");
+
+      _search = _bubble.GetSearchIndex();
     }
 
     private void btn_update_Click(object sender, EventArgs e)
@@ -27,25 +31,46 @@ namespace myFilterBubble.FrontEnd.WinForm
       var index = _bubble.GetIndexBuilder();
 
       var plock = new object();
-      var items = _watcher.AllSourceFiles.ToArray();
 
-      progressBar1.Maximum = items.Length;
+      progressBar1.Maximum = index.FilesTotal.Count();
       progressBar1.Minimum = 0;
-      progressBar1.Value = 0;
+      progressBar1.Value = index.FilesIndexed.Count;
 
       Parallel.ForEach(
-        items,
+        index.FilesNew,
         item =>
         {
-          _watcher.Parse(item, false);
+          index.Parse(item, false);
           lock (plock)
-            progressBar1.Invoke((MethodInvoker) delegate { progressBar1.Value++; });
+            progressBar1.Invoke((MethodInvoker)delegate { progressBar1.Value++; });
         });
     }
 
     private void btn_search_Click(object sender, EventArgs e)
     {
+      Dictionary<string, double> results = null;
 
+      var watch = new Stopwatch();
+      watch.Start();
+      if (radio_contains.Checked)
+      {
+        results = _search.Contains(txt_search.Text);
+      }
+      else if (radio_insentence.Checked)
+      {
+        var temp = _search.Contains(txt_search.Text);
+      }
+      else if (radio_phrase.Checked)
+      {
+
+      }
+      else
+      {
+        
+      }
+      watch.Stop();
+
+      lbl_statistics.Text = $"{results?.Count} DOCS found in {watch.ElapsedMilliseconds}ms";
     }
 
     private void btn_doc_prev_Click(object sender, EventArgs e)

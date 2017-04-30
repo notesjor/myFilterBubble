@@ -7,7 +7,7 @@ namespace myFilterBubble.Sdk
 {
   public class FileFormatPdf : AbstractFileFormat
   {
-    protected override string[] FileExtensions => new[] {".pdf"};
+    protected internal override string[] FileExtensions => new[] {".pdf"};
 
     public override void ReadFile(
       string filePath,

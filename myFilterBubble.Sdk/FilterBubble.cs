@@ -10,12 +10,11 @@ namespace myFilterBubble.Sdk
   [Serializable]
   public class FilterBubble
   {
-    private List<AbstractSource> _sources = new List<AbstractSource>();
-    private Dictionary<string, Dictionary<string, double>> _languageVectorModelCache = new Dictionary<string, Dictionary<string, double>>();
+    private List<string> _sources = new List<string>();
     public Guid Guid { get; set; }
     public string IndexPath { get; set; }
     public string Displayname { get; set; }
-    public IEnumerable<AbstractSource> Sources => _sources;
+    public IEnumerable<string> Sources => _sources;
 
     private FilterBubble() { }
 
@@ -31,15 +30,8 @@ namespace myFilterBubble.Sdk
                     : indexPath;
     }
 
-    public void Add(AbstractSource source) => _sources.Add(source);
-    public void Remove(AbstractSource source) => _sources.Remove(source);
-
-    public Dictionary<string, double> GetLanguageVectorModel(string languageCode)
-    {
-      if (!_languageVectorModelCache.ContainsKey(languageCode))
-        _languageVectorModelCache.Add(languageCode, LanguageVectorModelRepository.GetModel(languageCode));
-      return _languageVectorModelCache[languageCode];
-    }
+    public void Add(string directory) => _sources.Add(directory);
+    public void Remove(string directory) => _sources.Remove(directory);
 
     public FilterBubbleSearchIndex GetSearchIndex() => new FilterBubbleSearchIndex(this);
 

@@ -10,7 +10,7 @@ namespace myFilterBubble.Sdk {
       return FileExtensions.Any(x => path.EndsWith(x));
     }
 
-    protected abstract string[] FileExtensions { get; }
+    protected internal abstract string[] FileExtensions { get; }
 
     public abstract void ReadFile(
       string filePath,
