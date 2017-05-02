@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CorpusExplorer.Core.DocumentProcessing.Tagger.Special;
 using CorpusExplorer.Sdk.Helper;
+using CorpusExplorer.Sdk.Model.Adapter.Corpus;
+using CorpusExplorer.Sdk.Model.Adapter.Corpus.Abstract;
 
 namespace myFilterBubble.Sdk
 {
@@ -56,7 +59,7 @@ namespace myFilterBubble.Sdk
         });
     }
 
-    public Dictionary<string, double> Contains(string query)
+    public Dictionary<string, double> SearchContains(string query)
     {
       var split = query.Split(new[] {" ", ",", ".", ":", ";", "-"}, StringSplitOptions.RemoveEmptyEntries);
       var res = new Dictionary<string, double>();
@@ -76,6 +79,27 @@ namespace myFilterBubble.Sdk
         });
 
       return res;
+    }
+
+    public Dictionary<string, double> SearchVector(string query)
+    {
+      throw new NotImplementedException();
+      var dic = DocumentInMemoryAnalytics.Frequency(query);
+
+    }
+
+    public Dictionary<string, double> CompareVector(string document)
+    {
+      if (!_vector.ContainsKey(document))
+        return null;
+      throw new NotImplementedException();
+      var doc = _vector[document];
+
+    }
+
+    public AbstractCorpusAdapter Load(string fileName)
+    {
+      return CorpusAdapterWriteDirect.Create(Path.Combine(_filterBubble.IndexPath, fileName));
     }
   }
 }

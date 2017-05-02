@@ -37,6 +37,8 @@
       this.btn_search = new System.Windows.Forms.Button();
       this.groupBox3 = new System.Windows.Forms.GroupBox();
       this.radio_similarity = new System.Windows.Forms.RadioButton();
+      this.radio_phrase = new System.Windows.Forms.RadioButton();
+      this.radio_insentence = new System.Windows.Forms.RadioButton();
       this.radio_contains = new System.Windows.Forms.RadioButton();
       this.groupBox4 = new System.Windows.Forms.GroupBox();
       this.lbl_statistics = new System.Windows.Forms.Label();
@@ -44,26 +46,27 @@
       this.txt_page = new System.Windows.Forms.TextBox();
       this.panel1 = new System.Windows.Forms.Panel();
       this.btn_similarityCheck = new System.Windows.Forms.Button();
-      this.panel3 = new System.Windows.Forms.Panel();
-      this.lbl_page_info = new System.Windows.Forms.Label();
-      this.btn_page_next = new System.Windows.Forms.Button();
-      this.btn_page_prev = new System.Windows.Forms.Button();
-      this.label4 = new System.Windows.Forms.Label();
+      this.panel4 = new System.Windows.Forms.Panel();
       this.panel2 = new System.Windows.Forms.Panel();
-      this.lbl_doc_info = new System.Windows.Forms.Label();
-      this.btn_doc_next = new System.Windows.Forms.Button();
-      this.btn_doc_prev = new System.Windows.Forms.Button();
-      this.label3 = new System.Windows.Forms.Label();
-      this.radio_insentence = new System.Windows.Forms.RadioButton();
-      this.radio_phrase = new System.Windows.Forms.RadioButton();
+      this.btn_pageIndex_prev = new System.Windows.Forms.Button();
+      this.btn_pageIndex_next = new System.Windows.Forms.Button();
+      this.lbl_pageIndex = new System.Windows.Forms.Label();
+      this.grid_results = new System.Windows.Forms.DataGridView();
+      this.FILE = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.RANK = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.grid_similar = new System.Windows.Forms.DataGridView();
+      this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.groupBox3.SuspendLayout();
       this.groupBox4.SuspendLayout();
       this.groupBox5.SuspendLayout();
       this.panel1.SuspendLayout();
-      this.panel3.SuspendLayout();
+      this.panel4.SuspendLayout();
       this.panel2.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.grid_results)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.grid_similar)).BeginInit();
       this.SuspendLayout();
       // 
       // groupBox1
@@ -161,21 +164,45 @@
       // 
       this.radio_similarity.AutoSize = true;
       this.radio_similarity.Dock = System.Windows.Forms.DockStyle.Left;
-      this.radio_similarity.Location = new System.Drawing.Point(249, 16);
+      this.radio_similarity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.radio_similarity.Location = new System.Drawing.Point(218, 16);
       this.radio_similarity.Name = "radio_similarity";
-      this.radio_similarity.Size = new System.Drawing.Size(85, 31);
+      this.radio_similarity.Size = new System.Drawing.Size(95, 31);
       this.radio_similarity.TabIndex = 1;
       this.radio_similarity.Text = "SIMILARITY";
       this.radio_similarity.UseVisualStyleBackColor = true;
+      // 
+      // radio_phrase
+      // 
+      this.radio_phrase.AutoSize = true;
+      this.radio_phrase.Dock = System.Windows.Forms.DockStyle.Left;
+      this.radio_phrase.Location = new System.Drawing.Point(149, 16);
+      this.radio_phrase.Name = "radio_phrase";
+      this.radio_phrase.Size = new System.Drawing.Size(69, 31);
+      this.radio_phrase.TabIndex = 3;
+      this.radio_phrase.Text = "PHRASE";
+      this.radio_phrase.UseVisualStyleBackColor = true;
+      // 
+      // radio_insentence
+      // 
+      this.radio_insentence.AutoSize = true;
+      this.radio_insentence.Dock = System.Windows.Forms.DockStyle.Left;
+      this.radio_insentence.Location = new System.Drawing.Point(91, 16);
+      this.radio_insentence.Name = "radio_insentence";
+      this.radio_insentence.Size = new System.Drawing.Size(58, 31);
+      this.radio_insentence.TabIndex = 2;
+      this.radio_insentence.Text = "ALL-IN";
+      this.radio_insentence.UseVisualStyleBackColor = true;
       // 
       // radio_contains
       // 
       this.radio_contains.AutoSize = true;
       this.radio_contains.Checked = true;
       this.radio_contains.Dock = System.Windows.Forms.DockStyle.Left;
+      this.radio_contains.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.radio_contains.Location = new System.Drawing.Point(3, 16);
       this.radio_contains.Name = "radio_contains";
-      this.radio_contains.Size = new System.Drawing.Size(80, 31);
+      this.radio_contains.Size = new System.Drawing.Size(88, 31);
       this.radio_contains.TabIndex = 0;
       this.radio_contains.TabStop = true;
       this.radio_contains.Text = "CONTAINS";
@@ -204,6 +231,8 @@
       // groupBox5
       // 
       this.groupBox5.Controls.Add(this.txt_page);
+      this.groupBox5.Controls.Add(this.panel2);
+      this.groupBox5.Controls.Add(this.panel4);
       this.groupBox5.Controls.Add(this.panel1);
       this.groupBox5.Dock = System.Windows.Forms.DockStyle.Fill;
       this.groupBox5.Location = new System.Drawing.Point(0, 200);
@@ -216,164 +245,147 @@
       // txt_page
       // 
       this.txt_page.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.txt_page.Location = new System.Drawing.Point(193, 16);
+      this.txt_page.Location = new System.Drawing.Point(203, 47);
       this.txt_page.Multiline = true;
       this.txt_page.Name = "txt_page";
       this.txt_page.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-      this.txt_page.Size = new System.Drawing.Size(658, 242);
+      this.txt_page.Size = new System.Drawing.Size(448, 211);
       this.txt_page.TabIndex = 1;
       // 
       // panel1
       // 
-      this.panel1.Controls.Add(this.btn_similarityCheck);
-      this.panel1.Controls.Add(this.panel3);
-      this.panel1.Controls.Add(this.label4);
-      this.panel1.Controls.Add(this.panel2);
-      this.panel1.Controls.Add(this.label3);
+      this.panel1.Controls.Add(this.grid_results);
       this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
       this.panel1.Location = new System.Drawing.Point(3, 16);
       this.panel1.Name = "panel1";
-      this.panel1.Size = new System.Drawing.Size(190, 242);
+      this.panel1.Size = new System.Drawing.Size(200, 242);
       this.panel1.TabIndex = 0;
       // 
       // btn_similarityCheck
       // 
-      this.btn_similarityCheck.Dock = System.Windows.Forms.DockStyle.Bottom;
-      this.btn_similarityCheck.Location = new System.Drawing.Point(0, 211);
+      this.btn_similarityCheck.Dock = System.Windows.Forms.DockStyle.Top;
+      this.btn_similarityCheck.Location = new System.Drawing.Point(0, 0);
       this.btn_similarityCheck.Name = "btn_similarityCheck";
-      this.btn_similarityCheck.Size = new System.Drawing.Size(190, 31);
+      this.btn_similarityCheck.Size = new System.Drawing.Size(200, 31);
       this.btn_similarityCheck.TabIndex = 4;
-      this.btn_similarityCheck.Text = "SIMILAR";
+      this.btn_similarityCheck.Text = "..:: SIMILAR ::..";
       this.btn_similarityCheck.UseVisualStyleBackColor = true;
       this.btn_similarityCheck.Click += new System.EventHandler(this.btn_similarityCheck_Click);
       // 
-      // panel3
+      // panel4
       // 
-      this.panel3.Controls.Add(this.lbl_page_info);
-      this.panel3.Controls.Add(this.btn_page_next);
-      this.panel3.Controls.Add(this.btn_page_prev);
-      this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
-      this.panel3.Location = new System.Drawing.Point(0, 64);
-      this.panel3.Name = "panel3";
-      this.panel3.Size = new System.Drawing.Size(190, 38);
-      this.panel3.TabIndex = 3;
-      // 
-      // lbl_page_info
-      // 
-      this.lbl_page_info.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.lbl_page_info.Location = new System.Drawing.Point(38, 0);
-      this.lbl_page_info.Name = "lbl_page_info";
-      this.lbl_page_info.Size = new System.Drawing.Size(114, 38);
-      this.lbl_page_info.TabIndex = 3;
-      this.lbl_page_info.Text = "0 / 0";
-      this.lbl_page_info.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-      // 
-      // btn_page_next
-      // 
-      this.btn_page_next.Dock = System.Windows.Forms.DockStyle.Right;
-      this.btn_page_next.Location = new System.Drawing.Point(152, 0);
-      this.btn_page_next.Name = "btn_page_next";
-      this.btn_page_next.Size = new System.Drawing.Size(38, 38);
-      this.btn_page_next.TabIndex = 2;
-      this.btn_page_next.Text = ">";
-      this.btn_page_next.UseVisualStyleBackColor = true;
-      this.btn_page_next.Click += new System.EventHandler(this.btn_page_next_Click);
-      // 
-      // btn_page_prev
-      // 
-      this.btn_page_prev.Dock = System.Windows.Forms.DockStyle.Left;
-      this.btn_page_prev.Location = new System.Drawing.Point(0, 0);
-      this.btn_page_prev.Name = "btn_page_prev";
-      this.btn_page_prev.Size = new System.Drawing.Size(38, 38);
-      this.btn_page_prev.TabIndex = 1;
-      this.btn_page_prev.Text = "<";
-      this.btn_page_prev.UseVisualStyleBackColor = true;
-      this.btn_page_prev.Click += new System.EventHandler(this.btn_page_prev_Click);
-      // 
-      // label4
-      // 
-      this.label4.AutoSize = true;
-      this.label4.Dock = System.Windows.Forms.DockStyle.Top;
-      this.label4.Location = new System.Drawing.Point(0, 51);
-      this.label4.Name = "label4";
-      this.label4.Size = new System.Drawing.Size(36, 13);
-      this.label4.TabIndex = 2;
-      this.label4.Text = "PAGE";
+      this.panel4.Controls.Add(this.grid_similar);
+      this.panel4.Controls.Add(this.btn_similarityCheck);
+      this.panel4.Dock = System.Windows.Forms.DockStyle.Right;
+      this.panel4.Location = new System.Drawing.Point(651, 16);
+      this.panel4.Name = "panel4";
+      this.panel4.Size = new System.Drawing.Size(200, 242);
+      this.panel4.TabIndex = 2;
       // 
       // panel2
       // 
-      this.panel2.Controls.Add(this.lbl_doc_info);
-      this.panel2.Controls.Add(this.btn_doc_next);
-      this.panel2.Controls.Add(this.btn_doc_prev);
+      this.panel2.Controls.Add(this.lbl_pageIndex);
+      this.panel2.Controls.Add(this.btn_pageIndex_next);
+      this.panel2.Controls.Add(this.btn_pageIndex_prev);
       this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-      this.panel2.Location = new System.Drawing.Point(0, 13);
+      this.panel2.Location = new System.Drawing.Point(203, 16);
       this.panel2.Name = "panel2";
-      this.panel2.Size = new System.Drawing.Size(190, 38);
-      this.panel2.TabIndex = 0;
+      this.panel2.Size = new System.Drawing.Size(448, 31);
+      this.panel2.TabIndex = 3;
       // 
-      // lbl_doc_info
+      // btn_pageIndex_prev
       // 
-      this.lbl_doc_info.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.lbl_doc_info.Location = new System.Drawing.Point(38, 0);
-      this.lbl_doc_info.Name = "lbl_doc_info";
-      this.lbl_doc_info.Size = new System.Drawing.Size(114, 38);
-      this.lbl_doc_info.TabIndex = 3;
-      this.lbl_doc_info.Text = "0 / 0";
-      this.lbl_doc_info.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+      this.btn_pageIndex_prev.Dock = System.Windows.Forms.DockStyle.Left;
+      this.btn_pageIndex_prev.Location = new System.Drawing.Point(0, 0);
+      this.btn_pageIndex_prev.Name = "btn_pageIndex_prev";
+      this.btn_pageIndex_prev.Size = new System.Drawing.Size(31, 31);
+      this.btn_pageIndex_prev.TabIndex = 5;
+      this.btn_pageIndex_prev.Text = "<";
+      this.btn_pageIndex_prev.UseVisualStyleBackColor = true;
+      this.btn_pageIndex_prev.Click += new System.EventHandler(this.btn_pageIndex_prev_Click);
       // 
-      // btn_doc_next
+      // btn_pageIndex_next
       // 
-      this.btn_doc_next.Dock = System.Windows.Forms.DockStyle.Right;
-      this.btn_doc_next.Location = new System.Drawing.Point(152, 0);
-      this.btn_doc_next.Name = "btn_doc_next";
-      this.btn_doc_next.Size = new System.Drawing.Size(38, 38);
-      this.btn_doc_next.TabIndex = 2;
-      this.btn_doc_next.Text = ">";
-      this.btn_doc_next.UseVisualStyleBackColor = true;
-      this.btn_doc_next.Click += new System.EventHandler(this.btn_doc_next_Click);
+      this.btn_pageIndex_next.Dock = System.Windows.Forms.DockStyle.Right;
+      this.btn_pageIndex_next.Location = new System.Drawing.Point(417, 0);
+      this.btn_pageIndex_next.Name = "btn_pageIndex_next";
+      this.btn_pageIndex_next.Size = new System.Drawing.Size(31, 31);
+      this.btn_pageIndex_next.TabIndex = 6;
+      this.btn_pageIndex_next.Text = ">";
+      this.btn_pageIndex_next.UseVisualStyleBackColor = true;
+      this.btn_pageIndex_next.Click += new System.EventHandler(this.btn_pageIndex_next_Click);
       // 
-      // btn_doc_prev
+      // lbl_pageIndex
       // 
-      this.btn_doc_prev.Dock = System.Windows.Forms.DockStyle.Left;
-      this.btn_doc_prev.Location = new System.Drawing.Point(0, 0);
-      this.btn_doc_prev.Name = "btn_doc_prev";
-      this.btn_doc_prev.Size = new System.Drawing.Size(38, 38);
-      this.btn_doc_prev.TabIndex = 1;
-      this.btn_doc_prev.Text = "<";
-      this.btn_doc_prev.UseVisualStyleBackColor = true;
-      this.btn_doc_prev.Click += new System.EventHandler(this.btn_doc_prev_Click);
+      this.lbl_pageIndex.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.lbl_pageIndex.Location = new System.Drawing.Point(31, 0);
+      this.lbl_pageIndex.Name = "lbl_pageIndex";
+      this.lbl_pageIndex.Size = new System.Drawing.Size(386, 31);
+      this.lbl_pageIndex.TabIndex = 7;
+      this.lbl_pageIndex.Text = "0 / 0";
+      this.lbl_pageIndex.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
       // 
-      // label3
+      // grid_results
       // 
-      this.label3.AutoSize = true;
-      this.label3.Dock = System.Windows.Forms.DockStyle.Top;
-      this.label3.Location = new System.Drawing.Point(0, 0);
-      this.label3.Name = "label3";
-      this.label3.Size = new System.Drawing.Size(69, 13);
-      this.label3.TabIndex = 1;
-      this.label3.Text = "DOCUMENT";
+      this.grid_results.AllowUserToAddRows = false;
+      this.grid_results.AllowUserToDeleteRows = false;
+      this.grid_results.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+      this.grid_results.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      this.grid_results.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.FILE,
+            this.RANK});
+      this.grid_results.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.grid_results.Location = new System.Drawing.Point(0, 0);
+      this.grid_results.Name = "grid_results";
+      this.grid_results.ReadOnly = true;
+      this.grid_results.RowHeadersVisible = false;
+      this.grid_results.Size = new System.Drawing.Size(200, 242);
+      this.grid_results.TabIndex = 0;
+      this.grid_results.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_results_CellClick);
       // 
-      // radio_insentence
+      // FILE
       // 
-      this.radio_insentence.AutoSize = true;
-      this.radio_insentence.Dock = System.Windows.Forms.DockStyle.Left;
-      this.radio_insentence.Location = new System.Drawing.Point(83, 16);
-      this.radio_insentence.Name = "radio_insentence";
-      this.radio_insentence.Size = new System.Drawing.Size(97, 31);
-      this.radio_insentence.TabIndex = 2;
-      this.radio_insentence.Text = "IN-SENTENCE";
-      this.radio_insentence.UseVisualStyleBackColor = true;
+      this.FILE.HeaderText = "FILE";
+      this.FILE.Name = "FILE";
+      this.FILE.ReadOnly = true;
       // 
-      // radio_phrase
+      // RANK
       // 
-      this.radio_phrase.AutoSize = true;
-      this.radio_phrase.Dock = System.Windows.Forms.DockStyle.Left;
-      this.radio_phrase.Location = new System.Drawing.Point(180, 16);
-      this.radio_phrase.Name = "radio_phrase";
-      this.radio_phrase.Size = new System.Drawing.Size(69, 31);
-      this.radio_phrase.TabIndex = 3;
-      this.radio_phrase.Text = "PHRASE";
-      this.radio_phrase.UseVisualStyleBackColor = true;
+      this.RANK.FillWeight = 50F;
+      this.RANK.HeaderText = "RANK";
+      this.RANK.Name = "RANK";
+      this.RANK.ReadOnly = true;
+      // 
+      // grid_similar
+      // 
+      this.grid_similar.AllowUserToAddRows = false;
+      this.grid_similar.AllowUserToDeleteRows = false;
+      this.grid_similar.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+      this.grid_similar.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      this.grid_similar.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2});
+      this.grid_similar.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.grid_similar.Location = new System.Drawing.Point(0, 31);
+      this.grid_similar.Name = "grid_similar";
+      this.grid_similar.ReadOnly = true;
+      this.grid_similar.RowHeadersVisible = false;
+      this.grid_similar.Size = new System.Drawing.Size(200, 211);
+      this.grid_similar.TabIndex = 5;
+      this.grid_similar.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_similar_CellClick);
+      // 
+      // dataGridViewTextBoxColumn1
+      // 
+      this.dataGridViewTextBoxColumn1.HeaderText = "FILE";
+      this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+      this.dataGridViewTextBoxColumn1.ReadOnly = true;
+      // 
+      // dataGridViewTextBoxColumn2
+      // 
+      this.dataGridViewTextBoxColumn2.FillWeight = 50F;
+      this.dataGridViewTextBoxColumn2.HeaderText = "RANK";
+      this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+      this.dataGridViewTextBoxColumn2.ReadOnly = true;
       // 
       // QuickDemo
       // 
@@ -397,9 +409,10 @@
       this.groupBox5.ResumeLayout(false);
       this.groupBox5.PerformLayout();
       this.panel1.ResumeLayout(false);
-      this.panel1.PerformLayout();
-      this.panel3.ResumeLayout(false);
+      this.panel4.ResumeLayout(false);
       this.panel2.ResumeLayout(false);
+      ((System.ComponentModel.ISupportInitialize)(this.grid_results)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.grid_similar)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -422,18 +435,19 @@
     private System.Windows.Forms.TextBox txt_page;
     private System.Windows.Forms.Panel panel1;
     private System.Windows.Forms.Button btn_similarityCheck;
-    private System.Windows.Forms.Panel panel3;
-    private System.Windows.Forms.Label lbl_page_info;
-    private System.Windows.Forms.Button btn_page_next;
-    private System.Windows.Forms.Button btn_page_prev;
-    private System.Windows.Forms.Label label4;
-    private System.Windows.Forms.Panel panel2;
-    private System.Windows.Forms.Label lbl_doc_info;
-    private System.Windows.Forms.Button btn_doc_next;
-    private System.Windows.Forms.Button btn_doc_prev;
-    private System.Windows.Forms.Label label3;
     private System.Windows.Forms.RadioButton radio_phrase;
     private System.Windows.Forms.RadioButton radio_insentence;
+    private System.Windows.Forms.Panel panel2;
+    private System.Windows.Forms.Label lbl_pageIndex;
+    private System.Windows.Forms.Button btn_pageIndex_next;
+    private System.Windows.Forms.Button btn_pageIndex_prev;
+    private System.Windows.Forms.Panel panel4;
+    private System.Windows.Forms.DataGridView grid_results;
+    private System.Windows.Forms.DataGridViewTextBoxColumn FILE;
+    private System.Windows.Forms.DataGridViewTextBoxColumn RANK;
+    private System.Windows.Forms.DataGridView grid_similar;
+    private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+    private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
   }
 }
 
