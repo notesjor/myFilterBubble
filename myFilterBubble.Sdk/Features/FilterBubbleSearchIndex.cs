@@ -81,20 +81,53 @@ namespace myFilterBubble.Sdk
       return res;
     }
 
-    public Dictionary<string, double> SearchVector(string query)
+    public Dictionary<string, double> SearchVector(string fulltext)
     {
-      throw new NotImplementedException();
-      var dic = DocumentInMemoryAnalytics.Frequency(query);
+      Dictionary<string, double> fulltextVecs;
+      FilterBubbleIndexBuilder.InlineVector(ref fulltext, out fulltextVecs);
 
+      var rlo = new object();
+      var res = new Dictionary<string, double>();
+
+      Parallel.ForEach(
+        _vector,
+        docs =>
+        {
+          try
+          {
+            var sim = CalculateSimilarity(fulltextVecs, docs.Value);
+            if (double.IsInfinity(sim) || double.IsNaN(sim) || sim < 0.7)
+              return;
+
+            lock (rlo)
+              res.Add(docs.Key, sim);
+          }
+          catch
+          {
+            // ignore
+          }
+        });
+
+      return res;
     }
 
-    public Dictionary<string, double> CompareVector(string document)
+    private double CalculateSimilarity(Dictionary<string, double> vectorA, Dictionary<string, double> vectorB)
     {
-      if (!_vector.ContainsKey(document))
-        return null;
-      throw new NotImplementedException();
-      var doc = _vector[document];
+      // Funktion stark vereinfacht
+      var ab = 0.0d;
+      var a2 = 0.0d;
+      var b2 = 0.0d;
 
+      foreach (var pair in vectorA)
+      {
+        var b = vectorB.ContainsKey(pair.Key) ? vectorB[pair.Key] : 0;
+
+        ab += pair.Value * b;
+        a2 += pair.Value * pair.Value;
+        b2 += b * b;
+      }
+
+      return ab / (Math.Sqrt(a2) * Math.Sqrt(b2));
     }
 
     public AbstractCorpusAdapter Load(string fileName)

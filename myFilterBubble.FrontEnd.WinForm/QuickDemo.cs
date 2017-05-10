@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CorpusExplorer.Sdk.Blocks;
 using CorpusExplorer.Sdk.Helper;
+using CorpusExplorer.Sdk.Model;
+using CorpusExplorer.Sdk.Model.Adapter.Corpus.Abstract;
 using CorpusExplorer.Sdk.Model.Extension;
 using CorpusExplorer.Sdk.Utils.Filter.Abstract;
 using CorpusExplorer.Sdk.Utils.Filter.Queries;
@@ -21,6 +23,8 @@ namespace myFilterBubble.FrontEnd.WinForm
   {
     private FilterBubble _bubble;
     private FilterBubbleSearchIndex _search;
+    private AbstractCorpusAdapter _doc;
+    private Selection _sel;
 
     public QuickDemo()
     {
@@ -82,39 +86,58 @@ namespace myFilterBubble.FrontEnd.WinForm
         return;
       }
 
+      var queries = txt_search.Text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
       var best = results.OrderByDescending(x => x.Value).First();
 
       watch.Restart();
-      var doc = _search.Load(best.Key);
+      OpenDocument(best.Key);
       watch.Stop();
       var timeLoad = watch.ElapsedMilliseconds;
 
       watch.Restart();
-      var sel = doc.ToSelection();
-      var blo = sel.CreateBlock<DocumentBestSnippetBlock>();
-      blo.Calculate();
-      var page = blo.GetBestDocument().OrderByDescending(x=>x.Value).First().Key;
+      var page = GetBestPage(queries);
       watch.Stop();
       var timeBest = watch.ElapsedMilliseconds;
 
       watch.Restart();
-      var text = sel.GetReadableDocument(page, "Wort").ConvertToPlainText();
+      txt_page.Text = OpenPage(page);
       watch.Stop();
       var timeConvert = watch.ElapsedMilliseconds;
-
-      txt_page.Text = text;
 
       lbl_statistics.Text = $"{results?.Count} DOCS found in {timeSearch}ms / load {timeLoad}ms / best {timeBest}ms / read {timeConvert}ms => {timeSearch + timeLoad + timeBest + timeConvert}ms";
 
       grid_results.SuspendLayout();
       grid_results.Rows.Clear();
 
-      foreach (var result in results.OrderByDescending(x=>x.Value))
+      foreach (var result in results.OrderByDescending(x => x.Value))
       {
         grid_results.Rows.Add(result.Key, result.Value);
       }
 
       grid_results.ResumeLayout(false);
+    }
+
+    private string OpenPage(Guid page)
+    {
+      if (_sel == null || page == Guid.Empty)
+        return string.Empty;
+
+      var text = _sel.GetReadableDocument(page, "Wort").ConvertToPlainText();
+      return text;
+    }
+
+    private Guid GetBestPage(IEnumerable<string> queries)
+    {
+      var blo = _sel.CreateBlock<DocumentBestSnippetBlock>();
+      blo.LayerQueries = queries;
+      blo.Calculate();
+      return blo.GetBestDocument().OrderByDescending(x => x.Value).First().Key;
+    }
+
+    private void OpenDocument(string docName)
+    {
+      _doc = _search.Load(docName);
+      _sel = _doc.ToSelection();
     }
 
     private Dictionary<string, double> SearchVector()
@@ -183,7 +206,16 @@ namespace myFilterBubble.FrontEnd.WinForm
 
     private void btn_similarityCheck_Click(object sender, EventArgs e)
     {
+      var results = _search.SearchVector(txt_search.Text);
+      grid_similar.SuspendLayout();
+      grid_similar.Rows.Clear();
 
+      foreach (var result in results.OrderByDescending(x => x.Value))
+      {
+        grid_similar.Rows.Add(result.Key, result.Value);
+      }
+
+      grid_similar.ResumeLayout(false);
     }
 
     private void btn_pageIndex_prev_Click(object sender, EventArgs e)
@@ -198,12 +230,16 @@ namespace myFilterBubble.FrontEnd.WinForm
 
     private void grid_results_CellClick(object sender, DataGridViewCellEventArgs e)
     {
-
+      var fn = grid_results.Rows[e.RowIndex].Cells[0].Value.ToString();
+      OpenDocument(fn);
+      OpenPage(GetBestPage(txt_search.Text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries)));
     }
 
     private void grid_similar_CellClick(object sender, DataGridViewCellEventArgs e)
     {
-
+      var fn = grid_results.Rows[e.RowIndex].Cells[0].Value.ToString();
+      OpenDocument(fn);
+      OpenPage(GetBestPage(txt_search.Text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries)));
     }
   }
 }

@@ -69,6 +69,67 @@ namespace myFilterBubble.Sdk {
       // DETECT LANGUAGE
       cmeta.Add("LANGUAGE", LanguageDetectorHelper.DetectLanguage(ref pages));
 
+      AbstractCorpusAdapter corpus;
+      HashSet<string> list;
+      Dictionary<string, double> vecs;
+      ExecuteProcessingWorkflow(out corpus, out list, out vecs, pages, cmeta);
+
+      // SAVE MODEL
+      corpus.Save(modelPath, false);
+      Serializer.Serialize(list, modelPath + ".list", false);
+      Serializer.Serialize(vecs.ToArray(), modelPath + ".vecs", false);
+    }
+
+    public static void InlineCorpus(
+      ref string inlineText,
+      out AbstractCorpusAdapter corpus)
+    {
+      HashSet<string> list;
+      Dictionary<string, double> vecs;
+      Inline(ref inlineText, out corpus, out list, out vecs);
+    }
+
+    public static void InlineList(
+      ref string inlineText,
+      out HashSet<string> list)
+    {
+      AbstractCorpusAdapter corpus;
+      Dictionary<string, double> vecs;
+      Inline(ref inlineText, out corpus, out list, out vecs);
+    }
+
+    public static void InlineVector(
+      ref string inlineText,
+      out Dictionary<string, double> vecs)
+    {
+      AbstractCorpusAdapter corpus;
+      HashSet<string> list;
+      Inline(ref inlineText, out corpus, out list, out vecs);
+    }
+
+    public static void Inline(ref string inlineText, out AbstractCorpusAdapter corpus, out HashSet<string> list, out Dictionary<string, double> vecs)
+    {
+      var pages = new List<Dictionary<string, object>>
+      {
+        new Dictionary<string, object>
+        {
+          {"Text", inlineText},
+          { "PAGE", 1}
+        }
+      };
+
+      // DETECT LANGUAGE
+      var cmeta = new Dictionary<string, object> {{"LANGUAGE", LanguageDetectorHelper.DetectLanguage(ref pages)}};
+      ExecuteProcessingWorkflow(out corpus, out list, out vecs, pages, cmeta);
+    }
+
+    private static void ExecuteProcessingWorkflow(
+      out AbstractCorpusAdapter corpus,
+      out HashSet<string> list,
+      out Dictionary<string, double> vecs,
+      IEnumerable<Dictionary<string, object>> pages,
+      Dictionary<string, object> cmeta)
+    { 
       // CLEAN TEXT
       var cleanup = new StandardCleanup();
       foreach (var page in pages)
@@ -84,21 +145,20 @@ namespace myFilterBubble.Sdk {
       tagger.Execute();
 
       // GET CORPUS-MODEL
-      var model = tagger.Output.FirstOrDefault();
-      if (model == null || model.CountDocuments == 0 || model.CountToken == 0)
-        return;
+      corpus = tagger.Output.FirstOrDefault();
+      if (corpus == null || corpus.CountDocuments == 0 || corpus.CountToken == 0)
+        throw new NullReferenceException();
 
       // POST-PRODUCTION
       foreach (var m in cmeta)
-        model.SetCorpusMetadata(m.Key, m.Value);
+        corpus.SetCorpusMetadata(m.Key, m.Value);
 
       // SAVE MODEL
-      model.Save(modelPath, false);
-      Serializer.Serialize(new HashSet<string>(model.GetLayers("Wort").First().Values), modelPath + ".list", false);
-      Serializer.Serialize(ContextToVec(model).ToArray(), modelPath + ".vecs", false);
+      list = new HashSet<string>(corpus.GetLayers("Wort").First().Values);
+      vecs = ContextToVec(corpus);
     }
 
-    private Dictionary<string, double> ContextToVec(AbstractCorpusAdapter corpus)
+    private static Dictionary<string, double> ContextToVec(AbstractCorpusAdapter corpus)
     {
       var layer = corpus?.GetLayers("Wort")?.First();
       var doc = layer?[layer.DocumentGuids.First()];
@@ -129,7 +189,7 @@ namespace myFilterBubble.Sdk {
       return dic.Where(x => model.ContainsKey(x.Key)).ToDictionary(x => x.Key, x => (x.Value / count) * model[x.Key]);
     }
 
-    private Dictionary<string, double> GetVectors(Dictionary<string, double> languageVectors, IEnumerable<string> words) 
+    private static Dictionary<string, double> GetVectors(Dictionary<string, double> languageVectors, IEnumerable<string> words) 
       => words.Where(languageVectors.ContainsKey).ToDictionary(entry => entry, entry => languageVectors[entry]);
   }
 }
