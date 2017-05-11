@@ -10,7 +10,8 @@ using CorpusExplorer.Sdk.Utils.DocumentProcessing.Cleanup;
 using myFilterBubble.Sdk.Helper;
 using myFilterBubble.Sdk.Repository;
 
-namespace myFilterBubble.Sdk {
+namespace myFilterBubble.Sdk
+{
   public class FilterBubbleIndexBuilder
   {
     private readonly FilterBubble _filterBubble;
@@ -19,9 +20,9 @@ namespace myFilterBubble.Sdk {
 
     public IEnumerable<string> FilesTotal
       => new HashSet<string>(from source in _filterBubble.Sources
-          from filter in FileFormatRepository.GetFileFilterArray()
-          from file in Directory.GetFiles(source, filter, SearchOption.AllDirectories)
-          select file);
+                             from filter in FileFormatRepository.GetFileFilterArray()
+                             from file in Directory.GetFiles(source, filter, SearchOption.AllDirectories)
+                             select file);
 
     public Dictionary<string, string> FilesIndexed
     {
@@ -61,7 +62,7 @@ namespace myFilterBubble.Sdk {
     {
       List<Dictionary<string, object>> pages;
       Dictionary<string, object> cmeta;
-      
+
       // READ FILE
       var provider = FileFormatRepository.GetMatchingProvider(filePath);
       provider.ReadFile(filePath, out pages, out cmeta);
@@ -119,7 +120,7 @@ namespace myFilterBubble.Sdk {
       };
 
       // DETECT LANGUAGE
-      var cmeta = new Dictionary<string, object> {{"LANGUAGE", LanguageDetectorHelper.DetectLanguage(ref pages)}};
+      var cmeta = new Dictionary<string, object> { { "LANGUAGE", LanguageDetectorHelper.DetectLanguage(ref pages) } };
       ExecuteProcessingWorkflow(out corpus, out list, out vecs, pages, cmeta);
     }
 
@@ -129,7 +130,7 @@ namespace myFilterBubble.Sdk {
       out Dictionary<string, double> vecs,
       IEnumerable<Dictionary<string, object>> pages,
       Dictionary<string, object> cmeta)
-    { 
+    {
       // CLEAN TEXT
       var cleanup = new StandardCleanup();
       foreach (var page in pages)
@@ -184,12 +185,12 @@ namespace myFilterBubble.Sdk {
       var min = (int)(1 + Math.Log(count / 500));
       dic = dic.Where(x => x.Value > min).ToDictionary(x => x.Key, x => x.Value);
 
-      var languageVectors = LanguageVectorModelRepository.GetModel((string) corpus.GetCorpusMetadata("LANGUAGE"));
+      var languageVectors = LanguageVectorModelRepository.GetModel((string)corpus.GetCorpusMetadata("LANGUAGE"));
       var model = GetVectors(languageVectors, dic.Keys.ToArray());
       return dic.Where(x => model.ContainsKey(x.Key)).ToDictionary(x => x.Key, x => (x.Value / count) * model[x.Key]);
     }
 
-    private static Dictionary<string, double> GetVectors(Dictionary<string, double> languageVectors, IEnumerable<string> words) 
+    private static Dictionary<string, double> GetVectors(Dictionary<string, double> languageVectors, IEnumerable<string> words)
       => words.Where(languageVectors.ContainsKey).ToDictionary(entry => entry, entry => languageVectors[entry]);
   }
 }

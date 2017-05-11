@@ -86,6 +86,11 @@ namespace myFilterBubble.Sdk
       Dictionary<string, double> fulltextVecs;
       FilterBubbleIndexBuilder.InlineVector(ref fulltext, out fulltextVecs);
 
+      return SearchVector(fulltextVecs);
+    }
+
+    public Dictionary<string, double> SearchVector(Dictionary<string, double> fulltextVecs)
+    {
       var rlo = new object();
       var res = new Dictionary<string, double>();
 
@@ -111,6 +116,8 @@ namespace myFilterBubble.Sdk
       return res;
     }
 
+    public Dictionary<string, double> GetIndexedDocumentVector(string docName) { return _vector[docName]; }
+
     private double CalculateSimilarity(Dictionary<string, double> vectorA, Dictionary<string, double> vectorB)
     {
       // Funktion stark vereinfacht
@@ -120,7 +127,11 @@ namespace myFilterBubble.Sdk
 
       foreach (var pair in vectorA)
       {
-        var b = vectorB.ContainsKey(pair.Key) ? vectorB[pair.Key] : 0;
+        if (!vectorB.ContainsKey(pair.Key))
+          continue;
+        var b = vectorB[pair.Key];
+
+        //var b = vectorB.ContainsKey(pair.Key) ? vectorB[pair.Key] : 0;
 
         ab += pair.Value * b;
         a2 += pair.Value * pair.Value;

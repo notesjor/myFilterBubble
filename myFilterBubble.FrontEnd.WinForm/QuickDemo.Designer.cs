@@ -57,6 +57,8 @@
       this.grid_results = new System.Windows.Forms.DataGridView();
       this.FILE = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.RANK = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.btn_search_del = new System.Windows.Forms.Button();
+      this.btn_index_delete = new System.Windows.Forms.Button();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.groupBox3.SuspendLayout();
@@ -72,6 +74,7 @@
       // groupBox1
       // 
       this.groupBox1.Controls.Add(this.progressBar1);
+      this.groupBox1.Controls.Add(this.btn_index_delete);
       this.groupBox1.Controls.Add(this.lbl_progress);
       this.groupBox1.Controls.Add(this.btn_update);
       this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -87,7 +90,7 @@
       this.progressBar1.Dock = System.Windows.Forms.DockStyle.Fill;
       this.progressBar1.Location = new System.Drawing.Point(78, 16);
       this.progressBar1.Name = "progressBar1";
-      this.progressBar1.Size = new System.Drawing.Size(773, 31);
+      this.progressBar1.Size = new System.Drawing.Size(698, 31);
       this.progressBar1.TabIndex = 1;
       // 
       // lbl_progress
@@ -115,6 +118,7 @@
       // groupBox2
       // 
       this.groupBox2.Controls.Add(this.txt_search);
+      this.groupBox2.Controls.Add(this.btn_search_del);
       this.groupBox2.Controls.Add(this.btn_search);
       this.groupBox2.Dock = System.Windows.Forms.DockStyle.Top;
       this.groupBox2.Location = new System.Drawing.Point(0, 50);
@@ -133,8 +137,9 @@
       this.txt_search.Multiline = true;
       this.txt_search.Name = "txt_search";
       this.txt_search.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-      this.txt_search.Size = new System.Drawing.Size(773, 31);
+      this.txt_search.Size = new System.Drawing.Size(722, 31);
       this.txt_search.TabIndex = 2;
+      this.txt_search.TextChanged += new System.EventHandler(this.txt_search_TextChanged);
       // 
       // btn_search
       // 
@@ -165,12 +170,13 @@
       // 
       this.radio_similarity.AutoSize = true;
       this.radio_similarity.Dock = System.Windows.Forms.DockStyle.Left;
-      this.radio_similarity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.radio_similarity.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Strikeout))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.radio_similarity.ForeColor = System.Drawing.Color.Gray;
       this.radio_similarity.Location = new System.Drawing.Point(218, 16);
       this.radio_similarity.Name = "radio_similarity";
-      this.radio_similarity.Size = new System.Drawing.Size(95, 31);
+      this.radio_similarity.Size = new System.Drawing.Size(135, 31);
       this.radio_similarity.TabIndex = 1;
-      this.radio_similarity.Text = "SIMILARITY";
+      this.radio_similarity.Text = "SIMILARITY (2000)";
       this.radio_similarity.UseVisualStyleBackColor = true;
       // 
       // radio_phrase
@@ -266,7 +272,6 @@
       this.panel2.Name = "panel2";
       this.panel2.Size = new System.Drawing.Size(448, 31);
       this.panel2.TabIndex = 3;
-      this.panel2.Visible = false;
       // 
       // lbl_pageIndex
       // 
@@ -392,6 +397,28 @@
       this.RANK.Name = "RANK";
       this.RANK.ReadOnly = true;
       // 
+      // btn_search_del
+      // 
+      this.btn_search_del.Dock = System.Windows.Forms.DockStyle.Right;
+      this.btn_search_del.Location = new System.Drawing.Point(725, 16);
+      this.btn_search_del.Name = "btn_search_del";
+      this.btn_search_del.Size = new System.Drawing.Size(51, 31);
+      this.btn_search_del.TabIndex = 3;
+      this.btn_search_del.Text = "< DEL";
+      this.btn_search_del.UseVisualStyleBackColor = true;
+      this.btn_search_del.Click += new System.EventHandler(this.btn_search_del_Click);
+      // 
+      // btn_index_delete
+      // 
+      this.btn_index_delete.Dock = System.Windows.Forms.DockStyle.Right;
+      this.btn_index_delete.Location = new System.Drawing.Point(776, 16);
+      this.btn_index_delete.Name = "btn_index_delete";
+      this.btn_index_delete.Size = new System.Drawing.Size(75, 31);
+      this.btn_index_delete.TabIndex = 3;
+      this.btn_index_delete.Text = "DEL";
+      this.btn_index_delete.UseVisualStyleBackColor = true;
+      this.btn_index_delete.Click += new System.EventHandler(this.btn_index_delete_Click);
+      // 
       // QuickDemo
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -453,6 +480,8 @@
     private System.Windows.Forms.DataGridView grid_similar;
     private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
     private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+    private System.Windows.Forms.Button btn_search_del;
+    private System.Windows.Forms.Button btn_index_delete;
   }
 }
 
