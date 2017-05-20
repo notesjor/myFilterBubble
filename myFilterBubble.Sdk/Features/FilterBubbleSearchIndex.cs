@@ -59,6 +59,8 @@ namespace myFilterBubble.Sdk
         });
     }
 
+    public int IndexedDocumentCount => _vector.Count;
+
     public Dictionary<string, double> SearchContains(string query)
     {
       var split = query.Split(new[] {" ", ",", ".", ":", ";", "-"}, StringSplitOptions.RemoveEmptyEntries);
@@ -86,7 +88,7 @@ namespace myFilterBubble.Sdk
       Dictionary<string, double> fulltextVecs;
       FilterBubbleIndexBuilder.InlineVector(ref fulltext, out fulltextVecs);
 
-      return SearchVector(fulltextVecs);
+      return fulltextVecs == null ? null : SearchVector(fulltextVecs);
     }
 
     public Dictionary<string, double> SearchVector(Dictionary<string, double> fulltextVecs)

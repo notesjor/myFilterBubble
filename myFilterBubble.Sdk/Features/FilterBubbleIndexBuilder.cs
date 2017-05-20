@@ -75,6 +75,9 @@ namespace myFilterBubble.Sdk
       Dictionary<string, double> vecs;
       ExecuteProcessingWorkflow(out corpus, out list, out vecs, pages, cmeta);
 
+      if (corpus == null)
+        return;
+
       // SAVE MODEL
       corpus.Save(modelPath, false);
       Serializer.Serialize(list, modelPath + ".list", false);
@@ -148,7 +151,12 @@ namespace myFilterBubble.Sdk
       // GET CORPUS-MODEL
       corpus = tagger.Output.FirstOrDefault();
       if (corpus == null || corpus.CountDocuments == 0 || corpus.CountToken == 0)
-        throw new NullReferenceException();
+      {
+        corpus = null;
+        list = null;
+        vecs = null;
+        return;
+      }
 
       // POST-PRODUCTION
       foreach (var m in cmeta)

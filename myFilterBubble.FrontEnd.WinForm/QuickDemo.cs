@@ -29,11 +29,14 @@ namespace myFilterBubble.FrontEnd.WinForm
 
     public QuickDemo()
     {
+      Console.Write("INIT...");
       InitializeComponent();
       _bubble = new FilterBubble("Test", Guid.Parse("65bed36eaf8541bea885062d295a4b94"));
       _bubble.Add(@"C:\Indexed");
 
       _search = _bubble.GetSearchIndex();
+      Console.WriteLine("OK!");
+      Console.WriteLine($"{_search.IndexedDocumentCount} DOCUMENTS ALREADY INDEXED!");
     }
 
     private void btn_pageIndex_next_Click(object sender, EventArgs e)
@@ -77,7 +80,7 @@ namespace myFilterBubble.FrontEnd.WinForm
         return;
       }
 
-      var queries = txt_search.Text.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries);
+      var queries = txt_search.Text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
       var best = results.OrderByDescending(x => x.Value).First();
 
       watch.Restart();
@@ -126,27 +129,7 @@ namespace myFilterBubble.FrontEnd.WinForm
       grid_similar.ResumeLayout(false);
     }
 
-    private void btn_update_Click(object sender, EventArgs e)
-    {
-      var index = _bubble.GetIndexBuilder();
-
-      var plock = new object();
-
-      progressBar1.Maximum = index.FilesTotal.Count();
-      progressBar1.Minimum = 0;
-      progressBar1.Value = index.FilesIndexed.Count;
-
-      Parallel.ForEach(
-        index.FilesNew,
-        item =>
-        {
-          index.Parse(item, false);
-          lock (plock)
-          {
-            progressBar1.Invoke((MethodInvoker) delegate { progressBar1.Value++; });
-          }
-        });
-    }
+    private void btn_update_Click(object sender, EventArgs e) { backgroundWorker1.RunWorkerAsync(); }
 
     private Guid GetBestPage(IEnumerable<string> queries)
     {
@@ -160,14 +143,14 @@ namespace myFilterBubble.FrontEnd.WinForm
     {
       var fn = grid_results.Rows[e.RowIndex].Cells[0].Value.ToString();
       OpenDocument(fn);
-      OpenPage(GetBestPage(txt_search.Text.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries)));
+      OpenPage(GetBestPage(txt_search.Text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries)));
     }
 
     private void grid_similar_CellClick(object sender, DataGridViewCellEventArgs e)
     {
       var fn = grid_results.Rows[e.RowIndex].Cells[0].Value.ToString();
       OpenDocument(fn);
-      OpenPage(GetBestPage(txt_search.Text.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries)));
+      OpenPage(GetBestPage(txt_search.Text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries)));
     }
 
     private void OpenDocument(string docName)
@@ -283,6 +266,33 @@ namespace myFilterBubble.FrontEnd.WinForm
 
       Directory.Delete(_bubble.IndexPath, true);
       Close();
+    }
+
+    private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+    {
+      var index = _bubble.GetIndexBuilder();
+
+      var plock = new object();
+
+      progressBar1.Invoke((MethodInvoker)delegate
+     {
+       progressBar1.Maximum = index.FilesTotal.Count();
+       progressBar1.Minimum = 0;
+       progressBar1.Value = index.FilesIndexed.Count;
+       Console.WriteLine($"{index.FilesIndexed.Count} / {index.FilesTotal.Count()} = {(double)index.FilesIndexed.Count / index.FilesTotal.Count() * 100.0}% INDEXED");
+     });
+
+      Parallel.ForEach(
+        index.FilesNew,
+        item =>
+        {
+          index.Parse(item, false);
+          lock (plock)
+          {
+            progressBar1.Invoke((MethodInvoker)delegate { progressBar1.Value++; });
+            Console.WriteLine($"Indexed: {item}");
+          }
+        });
     }
   }
 }

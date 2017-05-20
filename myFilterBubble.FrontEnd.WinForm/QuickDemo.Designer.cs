@@ -30,10 +30,12 @@
     {
       this.groupBox1 = new System.Windows.Forms.GroupBox();
       this.progressBar1 = new System.Windows.Forms.ProgressBar();
+      this.btn_index_delete = new System.Windows.Forms.Button();
       this.lbl_progress = new System.Windows.Forms.Label();
       this.btn_update = new System.Windows.Forms.Button();
       this.groupBox2 = new System.Windows.Forms.GroupBox();
       this.txt_search = new System.Windows.Forms.TextBox();
+      this.btn_search_del = new System.Windows.Forms.Button();
       this.btn_search = new System.Windows.Forms.Button();
       this.groupBox3 = new System.Windows.Forms.GroupBox();
       this.radio_similarity = new System.Windows.Forms.RadioButton();
@@ -57,8 +59,7 @@
       this.grid_results = new System.Windows.Forms.DataGridView();
       this.FILE = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.RANK = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.btn_search_del = new System.Windows.Forms.Button();
-      this.btn_index_delete = new System.Windows.Forms.Button();
+      this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.groupBox3.SuspendLayout();
@@ -92,6 +93,17 @@
       this.progressBar1.Name = "progressBar1";
       this.progressBar1.Size = new System.Drawing.Size(698, 31);
       this.progressBar1.TabIndex = 1;
+      // 
+      // btn_index_delete
+      // 
+      this.btn_index_delete.Dock = System.Windows.Forms.DockStyle.Right;
+      this.btn_index_delete.Location = new System.Drawing.Point(776, 16);
+      this.btn_index_delete.Name = "btn_index_delete";
+      this.btn_index_delete.Size = new System.Drawing.Size(75, 31);
+      this.btn_index_delete.TabIndex = 3;
+      this.btn_index_delete.Text = "DEL";
+      this.btn_index_delete.UseVisualStyleBackColor = true;
+      this.btn_index_delete.Click += new System.EventHandler(this.btn_index_delete_Click);
       // 
       // lbl_progress
       // 
@@ -140,6 +152,17 @@
       this.txt_search.Size = new System.Drawing.Size(722, 31);
       this.txt_search.TabIndex = 2;
       this.txt_search.TextChanged += new System.EventHandler(this.txt_search_TextChanged);
+      // 
+      // btn_search_del
+      // 
+      this.btn_search_del.Dock = System.Windows.Forms.DockStyle.Right;
+      this.btn_search_del.Location = new System.Drawing.Point(725, 16);
+      this.btn_search_del.Name = "btn_search_del";
+      this.btn_search_del.Size = new System.Drawing.Size(51, 31);
+      this.btn_search_del.TabIndex = 3;
+      this.btn_search_del.Text = "< DEL";
+      this.btn_search_del.UseVisualStyleBackColor = true;
+      this.btn_search_del.Click += new System.EventHandler(this.btn_search_del_Click);
       // 
       // btn_search
       // 
@@ -397,27 +420,9 @@
       this.RANK.Name = "RANK";
       this.RANK.ReadOnly = true;
       // 
-      // btn_search_del
+      // backgroundWorker1
       // 
-      this.btn_search_del.Dock = System.Windows.Forms.DockStyle.Right;
-      this.btn_search_del.Location = new System.Drawing.Point(725, 16);
-      this.btn_search_del.Name = "btn_search_del";
-      this.btn_search_del.Size = new System.Drawing.Size(51, 31);
-      this.btn_search_del.TabIndex = 3;
-      this.btn_search_del.Text = "< DEL";
-      this.btn_search_del.UseVisualStyleBackColor = true;
-      this.btn_search_del.Click += new System.EventHandler(this.btn_search_del_Click);
-      // 
-      // btn_index_delete
-      // 
-      this.btn_index_delete.Dock = System.Windows.Forms.DockStyle.Right;
-      this.btn_index_delete.Location = new System.Drawing.Point(776, 16);
-      this.btn_index_delete.Name = "btn_index_delete";
-      this.btn_index_delete.Size = new System.Drawing.Size(75, 31);
-      this.btn_index_delete.TabIndex = 3;
-      this.btn_index_delete.Text = "DEL";
-      this.btn_index_delete.UseVisualStyleBackColor = true;
-      this.btn_index_delete.Click += new System.EventHandler(this.btn_index_delete_Click);
+      this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
       // 
       // QuickDemo
       // 
@@ -482,6 +487,7 @@
     private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
     private System.Windows.Forms.Button btn_search_del;
     private System.Windows.Forms.Button btn_index_delete;
+    private System.ComponentModel.BackgroundWorker backgroundWorker1;
   }
 }
 

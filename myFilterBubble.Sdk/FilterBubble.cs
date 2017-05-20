@@ -28,6 +28,8 @@ namespace myFilterBubble.Sdk
                       "myFilterBubble",
                       Guid.ToString("N"))
                     : indexPath;
+      if (!Directory.Exists(IndexPath))
+        Directory.CreateDirectory(IndexPath);
     }
 
     public void Add(string directory) => _sources.Add(directory);
