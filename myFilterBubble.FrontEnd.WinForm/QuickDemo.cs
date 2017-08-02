@@ -270,6 +270,9 @@ namespace myFilterBubble.FrontEnd.WinForm
 
     private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
     {
+      btn_index_delete.Invoke((MethodInvoker) delegate { btn_index_delete.Enabled = false; });
+      btn_update.Invoke((MethodInvoker)delegate { btn_index_delete.Enabled = false; });
+
       var index = _bubble.GetIndexBuilder();
 
       var plock = new object();
@@ -293,6 +296,9 @@ namespace myFilterBubble.FrontEnd.WinForm
             Console.WriteLine($"Indexed: {item}");
           }
         });
+
+      btn_index_delete.Invoke((MethodInvoker)delegate { btn_index_delete.Enabled = true; });
+      btn_update.Invoke((MethodInvoker)delegate { btn_index_delete.Enabled = true; });
     }
   }
 }

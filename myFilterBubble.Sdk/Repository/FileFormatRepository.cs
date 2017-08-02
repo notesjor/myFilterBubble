@@ -9,7 +9,7 @@ namespace myFilterBubble.Sdk.Repository
   {
     private static string[] _fileFilterArray;
 
-    private static AbstractFileFormat[] _formats = new[]
+    private static AbstractFileFormat[] _formats = 
     {
       new FileFormatPdf()
     };
