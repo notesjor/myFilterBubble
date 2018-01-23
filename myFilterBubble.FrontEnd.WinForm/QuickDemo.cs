@@ -173,7 +173,7 @@ namespace myFilterBubble.FrontEnd.WinForm
       _sel = _doc.ToSelection();
 
       var vm = new TextLiveSearchViewModel {Selection=_sel};
-      vm.AddQuery(new FilterQuerySingleLayerExactPhrase
+      vm.AddQuery(new FilterQuerySingleLayerAnyMatch
       {
         LayerQueries = txt_search.Text.Split(' '),
         LayerDisplayname = "Wort"
