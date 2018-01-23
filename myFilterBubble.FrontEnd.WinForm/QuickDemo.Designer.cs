@@ -28,6 +28,9 @@
     /// </summary>
     private void InitializeComponent()
     {
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
       this.progressBar1 = new System.Windows.Forms.ProgressBar();
       this.btn_index_delete = new System.Windows.Forms.Button();
@@ -45,7 +48,8 @@
       this.groupBox4 = new System.Windows.Forms.GroupBox();
       this.lbl_statistics = new System.Windows.Forms.Label();
       this.groupBox5 = new System.Windows.Forms.GroupBox();
-      this.txt_page = new System.Windows.Forms.TextBox();
+      this.txt_page = new System.Windows.Forms.RichTextBox();
+      this.dataGridView1 = new System.Windows.Forms.DataGridView();
       this.panel2 = new System.Windows.Forms.Panel();
       this.lbl_pageIndex = new System.Windows.Forms.Label();
       this.btn_pageIndex_next = new System.Windows.Forms.Button();
@@ -59,12 +63,18 @@
       this.grid_results = new System.Windows.Forms.DataGridView();
       this.FILE = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.RANK = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.btn_openPdf = new System.Windows.Forms.Button();
       this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+      this.PRE = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.MATCH = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.POST = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.PAGE = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.groupBox3.SuspendLayout();
       this.groupBox4.SuspendLayout();
       this.groupBox5.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
       this.panel2.SuspendLayout();
       this.panel4.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.grid_similar)).BeginInit();
@@ -261,6 +271,7 @@
       // groupBox5
       // 
       this.groupBox5.Controls.Add(this.txt_page);
+      this.groupBox5.Controls.Add(this.dataGridView1);
       this.groupBox5.Controls.Add(this.panel2);
       this.groupBox5.Controls.Add(this.panel4);
       this.groupBox5.Controls.Add(this.panel1);
@@ -276,14 +287,32 @@
       // 
       this.txt_page.BackColor = System.Drawing.Color.White;
       this.txt_page.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.txt_page.ForeColor = System.Drawing.Color.Black;
       this.txt_page.Location = new System.Drawing.Point(203, 47);
-      this.txt_page.Multiline = true;
       this.txt_page.Name = "txt_page";
       this.txt_page.ReadOnly = true;
-      this.txt_page.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-      this.txt_page.Size = new System.Drawing.Size(448, 211);
-      this.txt_page.TabIndex = 1;
+      this.txt_page.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+      this.txt_page.Size = new System.Drawing.Size(448, 83);
+      this.txt_page.TabIndex = 4;
+      this.txt_page.Text = "";
+      // 
+      // dataGridView1
+      // 
+      this.dataGridView1.AllowUserToAddRows = false;
+      this.dataGridView1.AllowUserToDeleteRows = false;
+      this.dataGridView1.AllowUserToResizeRows = false;
+      this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+      this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.PRE,
+            this.MATCH,
+            this.POST,
+            this.PAGE});
+      this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Bottom;
+      this.dataGridView1.Location = new System.Drawing.Point(203, 130);
+      this.dataGridView1.Name = "dataGridView1";
+      this.dataGridView1.RowHeadersVisible = false;
+      this.dataGridView1.Size = new System.Drawing.Size(448, 128);
+      this.dataGridView1.TabIndex = 5;
+      this.dataGridView1.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentDoubleClick);
       // 
       // panel2
       // 
@@ -383,6 +412,7 @@
       // panel1
       // 
       this.panel1.Controls.Add(this.grid_results);
+      this.panel1.Controls.Add(this.btn_openPdf);
       this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
       this.panel1.Location = new System.Drawing.Point(3, 16);
       this.panel1.Name = "panel1";
@@ -399,13 +429,14 @@
             this.FILE,
             this.RANK});
       this.grid_results.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.grid_results.Location = new System.Drawing.Point(0, 0);
+      this.grid_results.Location = new System.Drawing.Point(0, 31);
       this.grid_results.Name = "grid_results";
       this.grid_results.ReadOnly = true;
       this.grid_results.RowHeadersVisible = false;
-      this.grid_results.Size = new System.Drawing.Size(200, 242);
+      this.grid_results.Size = new System.Drawing.Size(200, 211);
       this.grid_results.TabIndex = 0;
       this.grid_results.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_results_CellClick);
+      this.grid_results.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.grid_results_CellContentDoubleClick);
       // 
       // FILE
       // 
@@ -420,9 +451,57 @@
       this.RANK.Name = "RANK";
       this.RANK.ReadOnly = true;
       // 
+      // btn_openPdf
+      // 
+      this.btn_openPdf.Dock = System.Windows.Forms.DockStyle.Top;
+      this.btn_openPdf.Location = new System.Drawing.Point(0, 0);
+      this.btn_openPdf.Name = "btn_openPdf";
+      this.btn_openPdf.Size = new System.Drawing.Size(200, 31);
+      this.btn_openPdf.TabIndex = 5;
+      this.btn_openPdf.Text = "..:: OPEN PDF ::..";
+      this.btn_openPdf.UseVisualStyleBackColor = true;
+      this.btn_openPdf.Click += new System.EventHandler(this.btn_openPdf_Click);
+      // 
       // backgroundWorker1
       // 
       this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
+      // 
+      // PRE
+      // 
+      this.PRE.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+      dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight;
+      this.PRE.DefaultCellStyle = dataGridViewCellStyle4;
+      this.PRE.HeaderText = "PRE";
+      this.PRE.Name = "PRE";
+      this.PRE.ReadOnly = true;
+      // 
+      // MATCH
+      // 
+      this.MATCH.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+      dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+      this.MATCH.DefaultCellStyle = dataGridViewCellStyle5;
+      this.MATCH.HeaderText = "MATCH";
+      this.MATCH.Name = "MATCH";
+      this.MATCH.ReadOnly = true;
+      // 
+      // POST
+      // 
+      this.POST.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+      dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+      this.POST.DefaultCellStyle = dataGridViewCellStyle6;
+      this.POST.HeaderText = "POST";
+      this.POST.Name = "POST";
+      this.POST.ReadOnly = true;
+      // 
+      // PAGE
+      // 
+      this.PAGE.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+      this.PAGE.FillWeight = 40F;
+      this.PAGE.HeaderText = "PAGE";
+      this.PAGE.Name = "PAGE";
+      this.PAGE.ReadOnly = true;
+      this.PAGE.Visible = false;
+      this.PAGE.Width = 61;
       // 
       // QuickDemo
       // 
@@ -444,7 +523,7 @@
       this.groupBox3.PerformLayout();
       this.groupBox4.ResumeLayout(false);
       this.groupBox5.ResumeLayout(false);
-      this.groupBox5.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
       this.panel2.ResumeLayout(false);
       this.panel4.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.grid_similar)).EndInit();
@@ -469,7 +548,6 @@
     private System.Windows.Forms.GroupBox groupBox4;
     private System.Windows.Forms.Label lbl_statistics;
     private System.Windows.Forms.GroupBox groupBox5;
-    private System.Windows.Forms.TextBox txt_page;
     private System.Windows.Forms.Panel panel1;
     private System.Windows.Forms.Button btn_similarityCheck;
     private System.Windows.Forms.RadioButton radio_phrase;
@@ -488,6 +566,13 @@
     private System.Windows.Forms.Button btn_search_del;
     private System.Windows.Forms.Button btn_index_delete;
     private System.ComponentModel.BackgroundWorker backgroundWorker1;
+    private System.Windows.Forms.Button btn_openPdf;
+    private System.Windows.Forms.RichTextBox txt_page;
+    private System.Windows.Forms.DataGridView dataGridView1;
+    private System.Windows.Forms.DataGridViewTextBoxColumn PRE;
+    private System.Windows.Forms.DataGridViewTextBoxColumn MATCH;
+    private System.Windows.Forms.DataGridViewTextBoxColumn POST;
+    private System.Windows.Forms.DataGridViewTextBoxColumn PAGE;
   }
 }
 

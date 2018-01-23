@@ -2,8 +2,9 @@
 using System.IO;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
+using myFilterBubble.Sdk.FileFormat.Abstract;
 
-namespace myFilterBubble.Sdk
+namespace myFilterBubble.Sdk.FileFormat
 {
   public class FileFormatPdf : AbstractFileFormat
   {

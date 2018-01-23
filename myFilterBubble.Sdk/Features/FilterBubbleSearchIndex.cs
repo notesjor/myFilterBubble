@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using CorpusExplorer.Core.DocumentProcessing.Tagger.Special;
 using CorpusExplorer.Sdk.Helper;
 using CorpusExplorer.Sdk.Model.Adapter.Corpus;
 using CorpusExplorer.Sdk.Model.Adapter.Corpus.Abstract;
 
-namespace myFilterBubble.Sdk
+namespace myFilterBubble.Sdk.Features
 {
   public class FilterBubbleSearchIndex
   {

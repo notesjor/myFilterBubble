@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using myFilterBubble.Sdk.FileFormat;
+using myFilterBubble.Sdk.FileFormat.Abstract;
 
 namespace myFilterBubble.Sdk.Repository
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using myFilterBubble.Sdk.Features;
 using myFilterBubble.Sdk.Repository;
 
 namespace myFilterBubble.Sdk

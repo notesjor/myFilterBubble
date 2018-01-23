@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace myFilterBubble.Sdk {
+namespace myFilterBubble.Sdk.Features {
   public class FilterBubbleIndexWatchdog
   {
     private readonly FilterBubble _filterBubble;

@@ -10,7 +10,7 @@ using CorpusExplorer.Sdk.Utils.DocumentProcessing.Cleanup;
 using myFilterBubble.Sdk.Helper;
 using myFilterBubble.Sdk.Repository;
 
-namespace myFilterBubble.Sdk
+namespace myFilterBubble.Sdk.Features
 {
   public class FilterBubbleIndexBuilder
   {

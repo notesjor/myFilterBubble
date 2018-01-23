@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace myFilterBubble.Sdk {
+namespace myFilterBubble.Sdk.FileFormat.Abstract {
   public abstract class AbstractFileFormat
   {
     public bool MatchesFileExtension(string path)
