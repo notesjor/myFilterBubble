@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace myFilterBubble.Sdk.Features {
+namespace myFilterBubble.Sdk.Features
+{
   public class FilterBubbleIndexWatchdog
   {
     private readonly FilterBubble _filterBubble;
@@ -30,19 +31,29 @@ namespace myFilterBubble.Sdk.Features {
       }
     }
 
-    private void WatcherOnRenamed(object sender, RenamedEventArgs renamedEventArgs)
+    private void WatcherOnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
     {
-      if (renamedEventArgs.ChangeType != WatcherChangeTypes.Renamed)
+      if (fileSystemEventArgs.ChangeType != WatcherChangeTypes.Changed)
         return;
 
       try
       {
-        // ToDo: File.Move(GetModelPath(renamedEventArgs.OldFullPath), GetModelPath(renamedEventArgs.FullPath));
+        // ToDo: File.Delete(GetModelPath(fileSystemEventArgs.FullPath));
       }
       catch
       {
         // ignore
       }
+
+      // ToDo: Parse(fileSystemEventArgs.FullPath, true);
+    }
+
+    private void WatcherOnCreated(object sender, FileSystemEventArgs fileSystemEventArgs)
+    {
+      if (fileSystemEventArgs.ChangeType != WatcherChangeTypes.Created)
+        return;
+
+      // ToDo: Parse(fileSystemEventArgs.FullPath, true);
     }
 
     private void WatcherOnDeleted(object sender, FileSystemEventArgs fileSystemEventArgs)
@@ -60,29 +71,19 @@ namespace myFilterBubble.Sdk.Features {
       }
     }
 
-    private void WatcherOnCreated(object sender, FileSystemEventArgs fileSystemEventArgs)
+    private void WatcherOnRenamed(object sender, RenamedEventArgs renamedEventArgs)
     {
-      if (fileSystemEventArgs.ChangeType != WatcherChangeTypes.Created)
-        return;
-
-      // ToDo: Parse(fileSystemEventArgs.FullPath, true);
-    }
-
-    private void WatcherOnChanged(object sender, FileSystemEventArgs fileSystemEventArgs)
-    {
-      if (fileSystemEventArgs.ChangeType != WatcherChangeTypes.Changed)
+      if (renamedEventArgs.ChangeType != WatcherChangeTypes.Renamed)
         return;
 
       try
       {
-        // ToDo: File.Delete(GetModelPath(fileSystemEventArgs.FullPath));
+        // ToDo: File.Move(GetModelPath(renamedEventArgs.OldFullPath), GetModelPath(renamedEventArgs.FullPath));
       }
       catch
       {
         // ignore
       }
-
-      // ToDo: Parse(fileSystemEventArgs.FullPath, true);
     }
   }
 }

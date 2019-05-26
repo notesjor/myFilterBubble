@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace myFilterBubble.Sdk.Helper
 {
   public static class ByteArrayToBitmapHelper
   {
-    public static Bitmap ToBitmap(this byte[] array, int width, int height, PixelFormat format = PixelFormat.Format16bppGrayScale)
+    public static Bitmap ToBitmap(this byte[] array, int width, int height,
+                                  PixelFormat format = PixelFormat.Format16bppGrayScale)
     {
       var res = new Bitmap(width, height, format);
       var data = res.LockBits(new Rectangle(0, 0, res.Width, res.Height), ImageLockMode.WriteOnly, res.PixelFormat);

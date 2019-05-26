@@ -16,13 +16,14 @@ namespace myFilterBubble.Sdk.FileFormat
       out Dictionary<string, object> cmeta)
     {
       pages = new List<Dictionary<string, object>>();
-      cmeta = new Dictionary<string, object> { { "FILE", filePath } };
+      cmeta = new Dictionary<string, object> {{"FILE", filePath}};
 
       var last = 0;
 
       using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+      using (var bs = new BufferedStream(fs))
       {
-        var pdfReader = new PdfReader(fs);
+        var pdfReader = new PdfReader(bs);
 
         var strategy = new SimpleTextExtractionStrategy();
         for (var i = 0; i < pdfReader.NumberOfPages; i++)
@@ -34,7 +35,7 @@ namespace myFilterBubble.Sdk.FileFormat
           pages.Add(new Dictionary<string, object>
           {
             {"Text", text},
-            {"PAGE", i }
+            {"PAGE", i}
           });
         }
 

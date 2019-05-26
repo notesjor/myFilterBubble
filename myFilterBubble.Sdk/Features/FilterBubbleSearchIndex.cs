@@ -11,9 +11,9 @@ namespace myFilterBubble.Sdk.Features
 {
   public class FilterBubbleSearchIndex
   {
+    private readonly Dictionary<string, HashSet<string>> _contains;
     private readonly FilterBubble _filterBubble;
-    private Dictionary<string, HashSet<string>> _contains;
-    private Dictionary<string, Dictionary<string, double>> _vector;
+    private readonly Dictionary<string, Dictionary<string, double>> _vector;
 
     public FilterBubbleSearchIndex(FilterBubble filterBubble)
     {
@@ -25,40 +25,55 @@ namespace myFilterBubble.Sdk.Features
 
       _contains = new Dictionary<string, HashSet<string>>();
       Parallel.ForEach(
-        filesList,
-        file =>
-        {
-          try
-          {
-            var content = Serializer.Deserialize<HashSet<string>>(file);
-            lock (@lock)
-              _contains.Add(Path.GetFileNameWithoutExtension(file), content);
-          }
-          catch
-          {
-            // ignore
-          }
-        });
+                       filesList,
+                       file =>
+                       {
+                         try
+                         {
+                           var content = Serializer.Deserialize<HashSet<string>>(file);
+                           lock (@lock)
+                           {
+                             _contains.Add(Path.GetFileNameWithoutExtension(file), content);
+                           }
+                         }
+                         catch
+                         {
+                           // ignore
+                         }
+                       });
 
       _vector = new Dictionary<string, Dictionary<string, double>>();
       Parallel.ForEach(
-        filesVec,
-        file =>
-        {
-          try
-          {
-            var content = Serializer.Deserialize<KeyValuePair<string, double>[]>(file).ToDictionary(x => x.Key, x => x.Value);
-            lock (@lock)
-              _vector.Add(Path.GetFileNameWithoutExtension(file), content);
-          }
-          catch
-          {
-            // ignore
-          }
-        });
+                       filesVec,
+                       file =>
+                       {
+                         try
+                         {
+                           var content = Serializer.Deserialize<KeyValuePair<string, double>[]>(file)
+                                                   .ToDictionary(x => x.Key, x => x.Value);
+                           lock (@lock)
+                           {
+                             _vector.Add(Path.GetFileNameWithoutExtension(file), content);
+                           }
+                         }
+                         catch
+                         {
+                           // ignore
+                         }
+                       });
     }
 
     public int IndexedDocumentCount => _vector.Count;
+
+    public Dictionary<string, double> GetIndexedDocumentVector(string docName)
+    {
+      return _vector[docName];
+    }
+
+    public AbstractCorpusAdapter Load(string fileName)
+    {
+      return CorpusAdapterWriteDirect.Create(Path.Combine(_filterBubble.IndexPath, fileName));
+    }
 
     public Dictionary<string, double> SearchContains(string query)
     {
@@ -67,17 +82,19 @@ namespace myFilterBubble.Sdk.Features
       var @lock = new object();
 
       Parallel.ForEach(
-        _contains,
-        doc =>
-        {
-          double count = split.Count(s => doc.Value.Contains(s));
-          if (count < 1)
-            return;
-          count /= split.Length;
-          
-          lock (@lock)
-            res.Add(doc.Key, count);
-        });
+                       _contains,
+                       doc =>
+                       {
+                         double count = split.Count(s => doc.Value.Contains(s));
+                         if (count < 1)
+                           return;
+                         count /= split.Length;
+
+                         lock (@lock)
+                         {
+                           res.Add(doc.Key, count);
+                         }
+                       });
 
       return res;
     }
@@ -96,28 +113,28 @@ namespace myFilterBubble.Sdk.Features
       var res = new Dictionary<string, double>();
 
       Parallel.ForEach(
-        _vector,
-        docs =>
-        {
-          try
-          {
-            var sim = CalculateSimilarity(fulltextVecs, docs.Value);
-            if (double.IsInfinity(sim) || double.IsNaN(sim) || sim < 0.7)
-              return;
+                       _vector,
+                       docs =>
+                       {
+                         try
+                         {
+                           var sim = CalculateSimilarity(fulltextVecs, docs.Value);
+                           if (double.IsInfinity(sim) || double.IsNaN(sim) || sim < 0.7)
+                             return;
 
-            lock (rlo)
-              res.Add(docs.Key, sim);
-          }
-          catch
-          {
-            // ignore
-          }
-        });
+                           lock (rlo)
+                           {
+                             res.Add(docs.Key, sim);
+                           }
+                         }
+                         catch
+                         {
+                           // ignore
+                         }
+                       });
 
       return res;
     }
-
-    public Dictionary<string, double> GetIndexedDocumentVector(string docName) { return _vector[docName]; }
 
     private double CalculateSimilarity(Dictionary<string, double> vectorA, Dictionary<string, double> vectorB)
     {
@@ -136,15 +153,10 @@ namespace myFilterBubble.Sdk.Features
 
         ab += pair.Value * b;
         a2 += pair.Value * pair.Value;
-        b2 += b * b;
+        b2 += b          * b;
       }
 
       return ab / (Math.Sqrt(a2) * Math.Sqrt(b2));
-    }
-
-    public AbstractCorpusAdapter Load(string fileName)
-    {
-      return CorpusAdapterWriteDirect.Create(Path.Combine(_filterBubble.IndexPath, fileName));
     }
   }
 }

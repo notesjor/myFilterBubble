@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ServiceProcess;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ServiceProcess;
 
 namespace myFilterBubble.Service
 {
-  static class Program
+  internal static class Program
   {
     /// <summary>
-    /// Der Haupteinstiegspunkt für die Anwendung.
+    ///   Der Haupteinstiegspunkt für die Anwendung.
     /// </summary>
-    static void Main()
+    private static void Main()
     {
       var ServicesToRun = new ServiceBase[]
-                                    {
-                                      new Service1()
-                                    };
+      {
+        new Service1()
+      };
       ServiceBase.Run(ServicesToRun);
     }
   }

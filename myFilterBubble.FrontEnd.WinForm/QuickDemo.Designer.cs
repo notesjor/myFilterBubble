@@ -28,9 +28,9 @@
     /// </summary>
     private void InitializeComponent()
     {
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+      System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
       this.groupBox1 = new System.Windows.Forms.GroupBox();
       this.progressBar1 = new System.Windows.Forms.ProgressBar();
       this.btn_index_delete = new System.Windows.Forms.Button();
@@ -50,6 +50,10 @@
       this.groupBox5 = new System.Windows.Forms.GroupBox();
       this.txt_page = new System.Windows.Forms.RichTextBox();
       this.dataGridView1 = new System.Windows.Forms.DataGridView();
+      this.PRE = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.MATCH = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.POST = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.PAGE = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.panel2 = new System.Windows.Forms.Panel();
       this.lbl_pageIndex = new System.Windows.Forms.Label();
       this.btn_pageIndex_next = new System.Windows.Forms.Button();
@@ -65,10 +69,11 @@
       this.RANK = new System.Windows.Forms.DataGridViewTextBoxColumn();
       this.btn_openPdf = new System.Windows.Forms.Button();
       this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-      this.PRE = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.MATCH = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.POST = new System.Windows.Forms.DataGridViewTextBoxColumn();
-      this.PAGE = new System.Windows.Forms.DataGridViewTextBoxColumn();
+      this.tabControl1 = new System.Windows.Forms.TabControl();
+      this.tabPage1 = new System.Windows.Forms.TabPage();
+      this.tabPage2 = new System.Windows.Forms.TabPage();
+      this.radPdfViewerNavigator1 = new Telerik.WinControls.UI.RadPdfViewerNavigator();
+      this.radPdfViewer1 = new Telerik.WinControls.UI.RadPdfViewer();
       this.groupBox1.SuspendLayout();
       this.groupBox2.SuspendLayout();
       this.groupBox3.SuspendLayout();
@@ -80,6 +85,11 @@
       ((System.ComponentModel.ISupportInitialize)(this.grid_similar)).BeginInit();
       this.panel1.SuspendLayout();
       ((System.ComponentModel.ISupportInitialize)(this.grid_results)).BeginInit();
+      this.tabControl1.SuspendLayout();
+      this.tabPage1.SuspendLayout();
+      this.tabPage2.SuspendLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.radPdfViewerNavigator1)).BeginInit();
+      ((System.ComponentModel.ISupportInitialize)(this.radPdfViewer1)).BeginInit();
       this.SuspendLayout();
       // 
       // groupBox1
@@ -270,9 +280,8 @@
       // 
       // groupBox5
       // 
-      this.groupBox5.Controls.Add(this.txt_page);
+      this.groupBox5.Controls.Add(this.tabControl1);
       this.groupBox5.Controls.Add(this.dataGridView1);
-      this.groupBox5.Controls.Add(this.panel2);
       this.groupBox5.Controls.Add(this.panel4);
       this.groupBox5.Controls.Add(this.panel1);
       this.groupBox5.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -287,11 +296,11 @@
       // 
       this.txt_page.BackColor = System.Drawing.Color.White;
       this.txt_page.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.txt_page.Location = new System.Drawing.Point(203, 47);
+      this.txt_page.Location = new System.Drawing.Point(3, 34);
       this.txt_page.Name = "txt_page";
       this.txt_page.ReadOnly = true;
       this.txt_page.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-      this.txt_page.Size = new System.Drawing.Size(448, 83);
+      this.txt_page.Size = new System.Drawing.Size(434, 51);
       this.txt_page.TabIndex = 4;
       this.txt_page.Text = "";
       // 
@@ -314,15 +323,51 @@
       this.dataGridView1.TabIndex = 5;
       this.dataGridView1.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentDoubleClick);
       // 
+      // PRE
+      // 
+      this.PRE.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+      dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight;
+      this.PRE.DefaultCellStyle = dataGridViewCellStyle7;
+      this.PRE.HeaderText = "PRE";
+      this.PRE.Name = "PRE";
+      this.PRE.ReadOnly = true;
+      // 
+      // MATCH
+      // 
+      this.MATCH.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+      dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
+      this.MATCH.DefaultCellStyle = dataGridViewCellStyle8;
+      this.MATCH.HeaderText = "MATCH";
+      this.MATCH.Name = "MATCH";
+      this.MATCH.ReadOnly = true;
+      // 
+      // POST
+      // 
+      this.POST.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+      dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+      this.POST.DefaultCellStyle = dataGridViewCellStyle9;
+      this.POST.HeaderText = "POST";
+      this.POST.Name = "POST";
+      this.POST.ReadOnly = true;
+      // 
+      // PAGE
+      // 
+      this.PAGE.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
+      this.PAGE.FillWeight = 40F;
+      this.PAGE.HeaderText = "PAGE";
+      this.PAGE.Name = "PAGE";
+      this.PAGE.ReadOnly = true;
+      this.PAGE.Visible = false;
+      // 
       // panel2
       // 
       this.panel2.Controls.Add(this.lbl_pageIndex);
       this.panel2.Controls.Add(this.btn_pageIndex_next);
       this.panel2.Controls.Add(this.btn_pageIndex_prev);
       this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-      this.panel2.Location = new System.Drawing.Point(203, 16);
+      this.panel2.Location = new System.Drawing.Point(3, 3);
       this.panel2.Name = "panel2";
-      this.panel2.Size = new System.Drawing.Size(448, 31);
+      this.panel2.Size = new System.Drawing.Size(434, 31);
       this.panel2.TabIndex = 3;
       // 
       // lbl_pageIndex
@@ -330,7 +375,7 @@
       this.lbl_pageIndex.Dock = System.Windows.Forms.DockStyle.Fill;
       this.lbl_pageIndex.Location = new System.Drawing.Point(31, 0);
       this.lbl_pageIndex.Name = "lbl_pageIndex";
-      this.lbl_pageIndex.Size = new System.Drawing.Size(386, 31);
+      this.lbl_pageIndex.Size = new System.Drawing.Size(372, 31);
       this.lbl_pageIndex.TabIndex = 7;
       this.lbl_pageIndex.Text = "0 / 0";
       this.lbl_pageIndex.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -338,7 +383,7 @@
       // btn_pageIndex_next
       // 
       this.btn_pageIndex_next.Dock = System.Windows.Forms.DockStyle.Right;
-      this.btn_pageIndex_next.Location = new System.Drawing.Point(417, 0);
+      this.btn_pageIndex_next.Location = new System.Drawing.Point(403, 0);
       this.btn_pageIndex_next.Name = "btn_pageIndex_next";
       this.btn_pageIndex_next.Size = new System.Drawing.Size(31, 31);
       this.btn_pageIndex_next.TabIndex = 6;
@@ -466,42 +511,59 @@
       // 
       this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
       // 
-      // PRE
+      // tabControl1
       // 
-      this.PRE.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-      dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopRight;
-      this.PRE.DefaultCellStyle = dataGridViewCellStyle4;
-      this.PRE.HeaderText = "PRE";
-      this.PRE.Name = "PRE";
-      this.PRE.ReadOnly = true;
+      this.tabControl1.Controls.Add(this.tabPage1);
+      this.tabControl1.Controls.Add(this.tabPage2);
+      this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tabControl1.Location = new System.Drawing.Point(203, 16);
+      this.tabControl1.Name = "tabControl1";
+      this.tabControl1.SelectedIndex = 0;
+      this.tabControl1.Size = new System.Drawing.Size(448, 114);
+      this.tabControl1.TabIndex = 6;
       // 
-      // MATCH
+      // tabPage1
       // 
-      this.MATCH.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-      dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopCenter;
-      this.MATCH.DefaultCellStyle = dataGridViewCellStyle5;
-      this.MATCH.HeaderText = "MATCH";
-      this.MATCH.Name = "MATCH";
-      this.MATCH.ReadOnly = true;
+      this.tabPage1.Controls.Add(this.txt_page);
+      this.tabPage1.Controls.Add(this.panel2);
+      this.tabPage1.Location = new System.Drawing.Point(4, 22);
+      this.tabPage1.Name = "tabPage1";
+      this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+      this.tabPage1.Size = new System.Drawing.Size(440, 88);
+      this.tabPage1.TabIndex = 0;
+      this.tabPage1.Text = "TEXT";
+      this.tabPage1.UseVisualStyleBackColor = true;
       // 
-      // POST
+      // tabPage2
       // 
-      this.POST.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-      dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-      this.POST.DefaultCellStyle = dataGridViewCellStyle6;
-      this.POST.HeaderText = "POST";
-      this.POST.Name = "POST";
-      this.POST.ReadOnly = true;
+      this.tabPage2.Controls.Add(this.radPdfViewer1);
+      this.tabPage2.Controls.Add(this.radPdfViewerNavigator1);
+      this.tabPage2.Location = new System.Drawing.Point(4, 22);
+      this.tabPage2.Name = "tabPage2";
+      this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+      this.tabPage2.Size = new System.Drawing.Size(440, 88);
+      this.tabPage2.TabIndex = 1;
+      this.tabPage2.Text = "PDF";
+      this.tabPage2.UseVisualStyleBackColor = true;
       // 
-      // PAGE
+      // radPdfViewerNavigator1
       // 
-      this.PAGE.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.ColumnHeader;
-      this.PAGE.FillWeight = 40F;
-      this.PAGE.HeaderText = "PAGE";
-      this.PAGE.Name = "PAGE";
-      this.PAGE.ReadOnly = true;
-      this.PAGE.Visible = false;
-      this.PAGE.Width = 61;
+      this.radPdfViewerNavigator1.AssociatedViewer = this.radPdfViewer1;
+      this.radPdfViewerNavigator1.Dock = System.Windows.Forms.DockStyle.Top;
+      this.radPdfViewerNavigator1.Location = new System.Drawing.Point(3, 3);
+      this.radPdfViewerNavigator1.Name = "radPdfViewerNavigator1";
+      this.radPdfViewerNavigator1.Size = new System.Drawing.Size(434, 38);
+      this.radPdfViewerNavigator1.TabIndex = 0;
+      // 
+      // radPdfViewer1
+      // 
+      this.radPdfViewer1.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.radPdfViewer1.Location = new System.Drawing.Point(3, 41);
+      this.radPdfViewer1.Name = "radPdfViewer1";
+      this.radPdfViewer1.Size = new System.Drawing.Size(434, 44);
+      this.radPdfViewer1.TabIndex = 1;
+      this.radPdfViewer1.ThumbnailsScaleFactor = 0.15F;
+      this.radPdfViewer1.ViewerMode = Telerik.WinControls.UI.FixedDocumentViewerMode.None;
       // 
       // QuickDemo
       // 
@@ -529,6 +591,12 @@
       ((System.ComponentModel.ISupportInitialize)(this.grid_similar)).EndInit();
       this.panel1.ResumeLayout(false);
       ((System.ComponentModel.ISupportInitialize)(this.grid_results)).EndInit();
+      this.tabControl1.ResumeLayout(false);
+      this.tabPage1.ResumeLayout(false);
+      this.tabPage2.ResumeLayout(false);
+      this.tabPage2.PerformLayout();
+      ((System.ComponentModel.ISupportInitialize)(this.radPdfViewerNavigator1)).EndInit();
+      ((System.ComponentModel.ISupportInitialize)(this.radPdfViewer1)).EndInit();
       this.ResumeLayout(false);
 
     }
@@ -573,6 +641,11 @@
     private System.Windows.Forms.DataGridViewTextBoxColumn MATCH;
     private System.Windows.Forms.DataGridViewTextBoxColumn POST;
     private System.Windows.Forms.DataGridViewTextBoxColumn PAGE;
+    private System.Windows.Forms.TabControl tabControl1;
+    private System.Windows.Forms.TabPage tabPage1;
+    private System.Windows.Forms.TabPage tabPage2;
+    private Telerik.WinControls.UI.RadPdfViewerNavigator radPdfViewerNavigator1;
+    private Telerik.WinControls.UI.RadPdfViewer radPdfViewer1;
   }
 }
 
