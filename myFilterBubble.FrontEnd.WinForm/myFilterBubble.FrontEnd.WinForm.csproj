@@ -115,9 +115,9 @@
       <Project>{FEBB88CF-455B-4896-BAB3-32E81DD4182F}</Project>
       <Name>CorpusExplorer.Sdk.Extern.iTextSharp</Name>
     </ProjectReference>
-    <ProjectReference Include="C:\Projekte\CorpusExplorerV2\CorpusExplorer\CorpusExplorer.Sdk.Extern.QuickIndex\CorpusExplorer.Sdk.Extern.QuickIndex.csproj">
-      <Project>{960F2B41-F7B6-4E74-8E65-BB918B4E8CFA}</Project>
-      <Name>CorpusExplorer.Sdk.Extern.QuickIndex</Name>
+    <ProjectReference Include="C:\Projekte\CorpusExplorerV2\CorpusExplorer\CorpusExplorer.Sdk.Extern.QuickIndexRocks\CorpusExplorer.Sdk.Extern.QuickIndexRocks.csproj">
+      <Project>{9b408711-7a52-4897-96b9-95cd3a45e210}</Project>
+      <Name>CorpusExplorer.Sdk.Extern.QuickIndexRocks</Name>
     </ProjectReference>
     <ProjectReference Include="C:\Projekte\CorpusExplorerV2\CorpusExplorer\CorpusExplorer.Sdk\CorpusExplorer.Sdk.csproj">
       <Project>{dc1b5a58-29da-476d-89f8-e73a1db11e52}</Project>

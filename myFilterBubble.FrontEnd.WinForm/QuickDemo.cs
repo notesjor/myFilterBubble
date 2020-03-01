@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using CorpusExplorer.Sdk.Ecosystem;
-using CorpusExplorer.Sdk.Extern.QuickIndex;
+using CorpusExplorer.Sdk.Extern.QuickIndexRocks;
 using CorpusExplorer.Sdk.Extern.TextSharp.PDF;
 using CorpusExplorer.Sdk.Helper;
 using CorpusExplorer.Sdk.Utils.DocumentProcessing.Tagger.RawText;
