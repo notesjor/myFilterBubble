@@ -15,9 +15,9 @@ namespace myFilterBubble.FrontEnd.WinForm
 {
   public partial class QuickDemo : Form
   {
-    private  QuickIndex _quickIndex;
+    private QuickIndex _quickIndex;
     private Dictionary<Guid, string> _dict;
-    private const string _corpusPath = "corpus/data.cec6";
+    private string _corpusPath = "corpus/data.cec6";
     private const string _rootPath = @"C:\eBooks";
 
     public QuickDemo()
@@ -27,10 +27,15 @@ namespace myFilterBubble.FrontEnd.WinForm
       if (!Directory.Exists("corpus"))
         Directory.CreateDirectory("corpus");
       InitializeComponent();
+#if DEBUG
+      if (!File.Exists(_corpusPath))
+        _corpusPath = "W:/eBooks-MFB/" + _corpusPath;
+#endif
+
       if (File.Exists(_corpusPath))
       {
         _quickIndex = new QuickIndex(_corpusPath);
-        Serializer.Deserialize<Dictionary<Guid, object>>("corpus/data.bin");
+        _dict = Serializer.Deserialize<Dictionary<Guid, string>>("corpus/data.bin");
       }
       Console.WriteLine("OK!");
     }
@@ -52,7 +57,7 @@ namespace myFilterBubble.FrontEnd.WinForm
                              Console.WriteLine($"1 / 5 = Read {files.Length} files");
                            });
 
-        var scraper = new TextSharpPdfScraper {Strategy = TextSharpPdfScraper.TextSharpPdfScraperStrategy.Location};
+        var scraper = new TextSharpPdfScraper { Strategy = TextSharpPdfScraper.TextSharpPdfScraperStrategy.Location };
         scraper.Input.Enqueue(files);
         scraper.Execute();
 
@@ -133,7 +138,7 @@ namespace myFilterBubble.FrontEnd.WinForm
       var watch = new Stopwatch();
       watch.Start();
       if (radio_contains.Checked)
-        results = _quickIndex.SearchAny(txt_search.Text.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries));
+        results = _quickIndex.SearchAny(txt_search.Text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries));
       else if (radio_doc.Checked)
         results = _quickIndex.SearchAllInOneDocument(txt_search.Text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries));
       else if (radio_sent.Checked)
