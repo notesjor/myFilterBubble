@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,6 +8,8 @@ using System.Threading.Tasks;
 using CorpusExplorer.Sdk.Helper;
 using CorpusExplorer.Sdk.Model.Adapter.Corpus;
 using CorpusExplorer.Sdk.Model.Adapter.Corpus.Abstract;
+
+#endregion
 
 namespace myFilterBubble.Sdk.Features
 {
@@ -31,10 +35,7 @@ namespace myFilterBubble.Sdk.Features
                          try
                          {
                            var content = Serializer.Deserialize<HashSet<string>>(file);
-                           lock (@lock)
-                           {
-                             _contains.Add(Path.GetFileNameWithoutExtension(file), content);
-                           }
+                           lock (@lock) _contains.Add(Path.GetFileNameWithoutExtension(file), content);
                          }
                          catch
                          {
@@ -51,10 +52,7 @@ namespace myFilterBubble.Sdk.Features
                          {
                            var content = Serializer.Deserialize<KeyValuePair<string, double>[]>(file)
                                                    .ToDictionary(x => x.Key, x => x.Value);
-                           lock (@lock)
-                           {
-                             _vector.Add(Path.GetFileNameWithoutExtension(file), content);
-                           }
+                           lock (@lock) _vector.Add(Path.GetFileNameWithoutExtension(file), content);
                          }
                          catch
                          {
@@ -64,77 +62,6 @@ namespace myFilterBubble.Sdk.Features
     }
 
     public int IndexedDocumentCount => _vector.Count;
-
-    public Dictionary<string, double> GetIndexedDocumentVector(string docName)
-    {
-      return _vector[docName];
-    }
-
-    public AbstractCorpusAdapter Load(string fileName)
-    {
-      return CorpusAdapterWriteDirect.Create(Path.Combine(_filterBubble.IndexPath, fileName));
-    }
-
-    public Dictionary<string, double> SearchContains(string query)
-    {
-      var split = query.Split(new[] {" ", ",", ".", ":", ";", "-"}, StringSplitOptions.RemoveEmptyEntries);
-      var res = new Dictionary<string, double>();
-      var @lock = new object();
-
-      Parallel.ForEach(
-                       _contains,
-                       doc =>
-                       {
-                         double count = split.Count(s => doc.Value.Contains(s));
-                         if (count < 1)
-                           return;
-                         count /= split.Length;
-
-                         lock (@lock)
-                         {
-                           res.Add(doc.Key, count);
-                         }
-                       });
-
-      return res;
-    }
-
-    public Dictionary<string, double> SearchVector(string fulltext)
-    {
-      Dictionary<string, double> fulltextVecs;
-      FilterBubbleIndexBuilder.InlineVector(ref fulltext, out fulltextVecs);
-
-      return fulltextVecs == null ? null : SearchVector(fulltextVecs);
-    }
-
-    public Dictionary<string, double> SearchVector(Dictionary<string, double> fulltextVecs)
-    {
-      var rlo = new object();
-      var res = new Dictionary<string, double>();
-
-      Parallel.ForEach(
-                       _vector,
-                       docs =>
-                       {
-                         try
-                         {
-                           var sim = CalculateSimilarity(fulltextVecs, docs.Value);
-                           if (double.IsInfinity(sim) || double.IsNaN(sim) || sim < 0.7)
-                             return;
-
-                           lock (rlo)
-                           {
-                             res.Add(docs.Key, sim);
-                           }
-                         }
-                         catch
-                         {
-                           // ignore
-                         }
-                       });
-
-      return res;
-    }
 
     private double CalculateSimilarity(Dictionary<string, double> vectorA, Dictionary<string, double> vectorB)
     {
@@ -157,6 +84,65 @@ namespace myFilterBubble.Sdk.Features
       }
 
       return ab / (Math.Sqrt(a2) * Math.Sqrt(b2));
+    }
+
+    public Dictionary<string, double> GetIndexedDocumentVector(string docName) => _vector[docName];
+
+    public AbstractCorpusAdapter Load(string fileName) =>
+      CorpusAdapterWriteDirect.Create(Path.Combine(_filterBubble.IndexPath, fileName));
+
+    public Dictionary<string, double> SearchContains(string query)
+    {
+      var split = query.Split(new[] { " ", ",", ".", ":", ";", "-" }, StringSplitOptions.RemoveEmptyEntries);
+      var res = new Dictionary<string, double>();
+      var @lock = new object();
+
+      Parallel.ForEach(
+                       _contains,
+                       doc =>
+                       {
+                         double count = split.Count(s => doc.Value.Contains(s));
+                         if (count < 1)
+                           return;
+                         count /= split.Length;
+
+                         lock (@lock) res.Add(doc.Key, count);
+                       });
+
+      return res;
+    }
+
+    public Dictionary<string, double> SearchVector(string fulltext)
+    {
+      FilterBubbleIndexBuilder.InlineVector(ref fulltext, out var fulltextVecs);
+
+      return fulltextVecs == null ? null : SearchVector(fulltextVecs);
+    }
+
+    public Dictionary<string, double> SearchVector(Dictionary<string, double> fulltextVecs)
+    {
+      var rlo = new object();
+      var res = new Dictionary<string, double>();
+
+      Parallel.ForEach(
+                       _vector,
+                       docs =>
+                       {
+                         try
+                         {
+                           var sim = CalculateSimilarity(fulltextVecs, docs.Value);
+                           if (double.IsInfinity(sim) || double.IsNaN(sim) || sim < 0.7)
+                             return;
+
+                           lock (rlo) res.Add(docs.Key, sim);
+                         }
+                         catch
+                         {
+                           // ignore
+                         }
+                       });
+
+      return res;
     }
   }
 }

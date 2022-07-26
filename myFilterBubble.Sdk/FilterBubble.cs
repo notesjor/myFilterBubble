@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using myFilterBubble.Sdk.Features;
+
+#endregion
 
 namespace myFilterBubble.Sdk
 {
@@ -38,20 +42,11 @@ namespace myFilterBubble.Sdk
       _sources.Add(directory);
     }
 
-    public FilterBubbleIndexBuilder GetIndexBuilder()
-    {
-      return new FilterBubbleIndexBuilder(this);
-    }
+    public FilterBubbleIndexBuilder GetIndexBuilder() => new FilterBubbleIndexBuilder(this);
 
-    public FilterBubbleIndexWatchdog GetIndexWatchdog()
-    {
-      return new FilterBubbleIndexWatchdog(this);
-    }
+    public FilterBubbleIndexWatchdog GetIndexWatchdog() => new FilterBubbleIndexWatchdog(this);
 
-    public FilterBubbleSearchIndex GetSearchIndex()
-    {
-      return new FilterBubbleSearchIndex(this);
-    }
+    public FilterBubbleSearchIndex GetSearchIndex() => new FilterBubbleSearchIndex(this);
 
     public void Remove(string directory)
     {

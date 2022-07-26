@@ -1,6 +1,10 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Threading;
 using System.Windows.Forms;
+
+#endregion
 
 namespace myFilterBubble.FrontEnd.WinForm
 {

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,16 +12,15 @@ using CorpusExplorer.Sdk.Utils.DocumentProcessing.Tagger.RawText;
 using myFilterBubble.Sdk.Helper;
 using myFilterBubble.Sdk.Repository;
 
+#endregion
+
 namespace myFilterBubble.Sdk.Features
 {
   public class FilterBubbleIndexBuilder
   {
     private readonly FilterBubble _filterBubble;
 
-    public FilterBubbleIndexBuilder(FilterBubble filterBubble)
-    {
-      _filterBubble = filterBubble;
-    }
+    public FilterBubbleIndexBuilder(FilterBubble filterBubble) => _filterBubble = filterBubble;
 
     public Dictionary<string, string> FilesIndexed
     {
@@ -45,59 +46,6 @@ namespace myFilterBubble.Sdk.Features
                              from file in Directory.GetFiles(source, filter, SearchOption.AllDirectories)
                              select file);
 
-    public static void Inline(ref string inlineText, out AbstractCorpusAdapter corpus, out HashSet<string> list,
-                              out Dictionary<string, double> vecs)
-    {
-      var pages = new List<Dictionary<string, object>>
-      {
-        new Dictionary<string, object>
-        {
-          {"Text", inlineText},
-          {"PAGE", 1}
-        }
-      };
-
-      // DETECT LANGUAGE
-      var cmeta = new Dictionary<string, object> {{"LANGUAGE", LanguageDetectorHelper.DetectLanguage(ref pages)}};
-      ExecuteProcessingWorkflow(out corpus, out list, out vecs, pages, cmeta);
-    }
-
-    public static void InlineCorpus(
-      ref string inlineText,
-      out AbstractCorpusAdapter corpus)
-    {
-      HashSet<string> list;
-      Dictionary<string, double> vecs;
-      Inline(ref inlineText, out corpus, out list, out vecs);
-    }
-
-    public static void InlineList(
-      ref string inlineText,
-      out HashSet<string> list)
-    {
-      AbstractCorpusAdapter corpus;
-      Dictionary<string, double> vecs;
-      Inline(ref inlineText, out corpus, out list, out vecs);
-    }
-
-    public static void InlineVector(
-      ref string inlineText,
-      out Dictionary<string, double> vecs)
-    {
-      AbstractCorpusAdapter corpus;
-      HashSet<string> list;
-      Inline(ref inlineText, out corpus, out list, out vecs);
-    }
-
-    public void Parse(string path, bool overwrite)
-    {
-      var model = GetIndexPath(path);
-      if (File.Exists(model) && !overwrite)
-        return;
-
-      ParseFile(path, model);
-    }
-
     private static Dictionary<string, double> ContextToVec(AbstractCorpusAdapter corpus)
     {
       var layer = corpus?.GetLayers("Wort")?.First();
@@ -121,10 +69,10 @@ namespace myFilterBubble.Sdk.Features
         }
       }
 
-      var min = (int) (1 + Math.Log(count / 500));
+      var min = (int)(1 + Math.Log(count / 500));
       dic = dic.Where(x => x.Value > min).ToDictionary(x => x.Key, x => x.Value);
 
-      var languageVectors = LanguageVectorModelRepository.GetModel((string) corpus.GetCorpusMetadata("LANGUAGE"));
+      var languageVectors = LanguageVectorModelRepository.GetModel((string)corpus.GetCorpusMetadata("LANGUAGE"));
       var model = GetVectors(languageVectors, dic.Keys.ToArray());
       return dic.Where(x => model.ContainsKey(x.Key)).ToDictionary(x => x.Key, x => x.Value / count * model[x.Key]);
     }
@@ -183,22 +131,69 @@ namespace myFilterBubble.Sdk.Features
       return words.Where(languageVectors.ContainsKey).ToDictionary(entry => entry, entry => languageVectors[entry]);
     }
 
+    public static void Inline(ref string inlineText, out AbstractCorpusAdapter corpus, out HashSet<string> list,
+                              out Dictionary<string, double> vecs)
+    {
+      var pages = new List<Dictionary<string, object>>
+      {
+        new Dictionary<string, object>
+        {
+          { "Text", inlineText },
+          { "PAGE", 1 }
+        }
+      };
+
+      // DETECT LANGUAGE
+      var cmeta = new Dictionary<string, object> { { "LANGUAGE", LanguageDetectorHelper.DetectLanguage(ref pages) } };
+      ExecuteProcessingWorkflow(out corpus, out list, out vecs, pages, cmeta);
+    }
+
+    public static void InlineCorpus(
+      ref string inlineText,
+      out AbstractCorpusAdapter corpus)
+    {
+      HashSet<string> list;
+      Dictionary<string, double> vecs;
+      Inline(ref inlineText, out corpus, out list, out vecs);
+    }
+
+    public static void InlineList(
+      ref string inlineText,
+      out HashSet<string> list)
+    {
+      AbstractCorpusAdapter corpus;
+      Dictionary<string, double> vecs;
+      Inline(ref inlineText, out corpus, out list, out vecs);
+    }
+
+    public static void InlineVector(
+      ref string inlineText,
+      out Dictionary<string, double> vecs)
+    {
+      AbstractCorpusAdapter corpus;
+      HashSet<string> list;
+      Inline(ref inlineText, out corpus, out list, out vecs);
+    }
+
+    public void Parse(string path, bool overwrite)
+    {
+      var model = GetIndexPath(path);
+      if (File.Exists(model) && !overwrite)
+        return;
+
+      ParseFile(path, model);
+    }
+
     private void ParseFile(string filePath, string modelPath)
     {
-      List<Dictionary<string, object>> pages;
-      Dictionary<string, object> cmeta;
-
       // READ FILE
       var provider = FileFormatRepository.GetMatchingProvider(filePath);
-      provider.ReadFile(filePath, out pages, out cmeta);
+      provider.ReadFile(filePath, out var pages, out var cmeta);
 
       // DETECT LANGUAGE
       cmeta.Add("LANGUAGE", LanguageDetectorHelper.DetectLanguage(ref pages));
 
-      AbstractCorpusAdapter corpus;
-      HashSet<string> list;
-      Dictionary<string, double> vecs;
-      ExecuteProcessingWorkflow(out corpus, out list, out vecs, pages, cmeta);
+      ExecuteProcessingWorkflow(out var corpus, out var list, out var vecs, pages, cmeta);
 
       if (corpus == null)
         return;

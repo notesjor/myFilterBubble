@@ -1,6 +1,10 @@
-﻿using System.Drawing;
+﻿#region
+
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+
+#endregion
 
 namespace myFilterBubble.Sdk.Helper
 {

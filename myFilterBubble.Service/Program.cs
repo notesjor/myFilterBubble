@@ -1,4 +1,8 @@
-﻿using System.ServiceProcess;
+﻿#region
+
+using System.ServiceProcess;
+
+#endregion
 
 namespace myFilterBubble.Service
 {

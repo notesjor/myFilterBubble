@@ -1,14 +1,18 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.IO;
 using iTextSharp.text.pdf;
 using iTextSharp.text.pdf.parser;
 using myFilterBubble.Sdk.FileFormat.Abstract;
 
+#endregion
+
 namespace myFilterBubble.Sdk.FileFormat
 {
   public class FileFormatPdf : AbstractFileFormat
   {
-    protected internal override string[] FileExtensions => new[] {".pdf"};
+    protected internal override string[] FileExtensions => new[] { ".pdf" };
 
     public override void ReadFile(
       string filePath,
@@ -16,7 +20,7 @@ namespace myFilterBubble.Sdk.FileFormat
       out Dictionary<string, object> cmeta)
     {
       pages = new List<Dictionary<string, object>>();
-      cmeta = new Dictionary<string, object> {{"FILE", filePath}};
+      cmeta = new Dictionary<string, object> { { "FILE", filePath } };
 
       var last = 0;
 
@@ -34,8 +38,8 @@ namespace myFilterBubble.Sdk.FileFormat
 
           pages.Add(new Dictionary<string, object>
           {
-            {"Text", text},
-            {"PAGE", i}
+            { "Text", text },
+            { "PAGE", i }
           });
         }
 

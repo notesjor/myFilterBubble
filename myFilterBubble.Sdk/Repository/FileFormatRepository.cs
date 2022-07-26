@@ -1,6 +1,10 @@
-﻿using System.Linq;
+﻿#region
+
+using System.Linq;
 using myFilterBubble.Sdk.FileFormat;
 using myFilterBubble.Sdk.FileFormat.Abstract;
+
+#endregion
 
 namespace myFilterBubble.Sdk.Repository
 {

@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
+#endregion
 
 namespace myFilterBubble.Sdk.Repository
 {
@@ -25,7 +29,7 @@ namespace myFilterBubble.Sdk.Repository
     private static Dictionary<string, double> LoadModel(string languageCode)
     {
       return File.ReadAllLines($"Model/{languageCode}/qsearch.csv")
-                 .Select(line => line.Split(new[] {"\t"}, StringSplitOptions.RemoveEmptyEntries))
+                 .Select(line => line.Split(new[] { "\t" }, StringSplitOptions.RemoveEmptyEntries))
                  .ToDictionary(split => split[0], split => double.Parse(split[1]));
     }
   }

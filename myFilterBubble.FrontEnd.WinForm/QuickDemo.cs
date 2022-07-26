@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -11,14 +13,16 @@ using CorpusExplorer.Sdk.Extern.TextSharp.PDF;
 using CorpusExplorer.Sdk.Helper;
 using CorpusExplorer.Sdk.Utils.DocumentProcessing.Tagger.RawText;
 
+#endregion
+
 namespace myFilterBubble.FrontEnd.WinForm
 {
   public partial class QuickDemo : Form
   {
-    private QuickIndex _quickIndex;
-    private Dictionary<Guid, string> _dict;
-    private string _corpusPath = "corpus/data.cec6";
     private const string _rootPath = @"C:\eBooks";
+    private readonly string _corpusPath = "corpus/data.cec6";
+    private Dictionary<Guid, string> _dict;
+    private QuickIndex _quickIndex;
 
     public QuickDemo()
     {
@@ -37,6 +41,7 @@ namespace myFilterBubble.FrontEnd.WinForm
         _quickIndex = new QuickIndex(_corpusPath);
         _dict = Serializer.Deserialize<Dictionary<Guid, string>>("corpus/data.bin");
       }
+
       Console.WriteLine("OK!");
     }
 
@@ -50,12 +55,12 @@ namespace myFilterBubble.FrontEnd.WinForm
         var files = Directory.GetFiles(_rootPath, "*.pdf", SearchOption.AllDirectories);
 
         progressBar1.Invoke((MethodInvoker)delegate
-                           {
-                             progressBar1.Maximum = 5;
-                             progressBar1.Minimum = 0;
-                             progressBar1.Value = 1;
-                             Console.WriteLine($"1 / 5 = Read {files.Length} files");
-                           });
+        {
+          progressBar1.Maximum = 5;
+          progressBar1.Minimum = 0;
+          progressBar1.Value = 1;
+          Console.WriteLine($"1 / 5 = Read {files.Length} files");
+        });
 
         var scraper = new TextSharpPdfScraper { Strategy = TextSharpPdfScraper.TextSharpPdfScraperStrategy.Location };
         scraper.Input.Enqueue(files);
@@ -66,7 +71,7 @@ namespace myFilterBubble.FrontEnd.WinForm
           progressBar1.Maximum = 5;
           progressBar1.Minimum = 0;
           progressBar1.Value = 2;
-          Console.WriteLine($"2 / 5 = Cleaning");
+          Console.WriteLine("2 / 5 = Cleaning");
         });
 
         // no cleanup
@@ -76,7 +81,7 @@ namespace myFilterBubble.FrontEnd.WinForm
           progressBar1.Maximum = 5;
           progressBar1.Minimum = 0;
           progressBar1.Value = 3;
-          Console.WriteLine($"3 / 5 = Tagging");
+          Console.WriteLine("3 / 5 = Tagging");
         });
 
         var tagger = new RawTextTagger();
@@ -92,7 +97,7 @@ namespace myFilterBubble.FrontEnd.WinForm
           progressBar1.Maximum = 5;
           progressBar1.Minimum = 0;
           progressBar1.Value = 4;
-          Console.WriteLine($"4 / 5 = Build QuickIndex");
+          Console.WriteLine("4 / 5 = Build QuickIndex");
         });
 
         _quickIndex = new QuickIndex(_corpusPath);
@@ -105,7 +110,7 @@ namespace myFilterBubble.FrontEnd.WinForm
           progressBar1.Maximum = 5;
           progressBar1.Minimum = 0;
           progressBar1.Value = 4;
-          Console.WriteLine($"5 / 5 = COMPLETE!");
+          Console.WriteLine("5 / 5 = COMPLETE!");
         });
       }
       catch (Exception ex)
@@ -140,9 +145,11 @@ namespace myFilterBubble.FrontEnd.WinForm
       if (radio_contains.Checked)
         results = _quickIndex.SearchAny(txt_search.Text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries));
       else if (radio_doc.Checked)
-        results = _quickIndex.SearchAllInOneDocument(txt_search.Text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries));
+        results = _quickIndex.SearchAllInOneDocument(txt_search.Text.Split(new[] { " " },
+                                                                           StringSplitOptions.RemoveEmptyEntries));
       else if (radio_sent.Checked)
-        results = _quickIndex.SearchAllInOneSentence(txt_search.Text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries));
+        results = _quickIndex.SearchAllInOneSentence(txt_search.Text.Split(new[] { " " },
+                                                                           StringSplitOptions.RemoveEmptyEntries));
       watch.Stop();
       var timeSearch = watch.ElapsedMilliseconds;
 
