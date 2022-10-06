@@ -91,9 +91,11 @@ namespace myFilterBubble.Sdk.Features
     public AbstractCorpusAdapter Load(string fileName) =>
       CorpusAdapterWriteDirect.Create(Path.Combine(_filterBubble.IndexPath, fileName));
 
+    private static char[] _separator = { ' ', ',', '.', ':', ';', '-' };
+
     public Dictionary<string, double> SearchContains(string query)
     {
-      var split = query.Split(new[] { " ", ",", ".", ":", ";", "-" }, StringSplitOptions.RemoveEmptyEntries);
+      var split = query.Split(_separator, StringSplitOptions.RemoveEmptyEntries);
       var res = new Dictionary<string, double>();
       var @lock = new object();
 

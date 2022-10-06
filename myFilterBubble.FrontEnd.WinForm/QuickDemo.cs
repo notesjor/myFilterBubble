@@ -12,6 +12,7 @@ using CorpusExplorer.Sdk.Extern.QuickIndexRocks;
 using CorpusExplorer.Sdk.Extern.TextSharp.PDF;
 using CorpusExplorer.Sdk.Helper;
 using CorpusExplorer.Sdk.Utils.DocumentProcessing.Tagger.RawText;
+using Splitter = CorpusExplorer.Sdk.Helper.Splitter;
 
 #endregion
 
@@ -143,12 +144,12 @@ namespace myFilterBubble.FrontEnd.WinForm
       var watch = new Stopwatch();
       watch.Start();
       if (radio_contains.Checked)
-        results = _quickIndex.SearchAny(txt_search.Text.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries));
+        results = _quickIndex.SearchAny(txt_search.Text.Split(Splitter.Space, StringSplitOptions.RemoveEmptyEntries));
       else if (radio_doc.Checked)
-        results = _quickIndex.SearchAllInOneDocument(txt_search.Text.Split(new[] { " " },
+        results = _quickIndex.SearchAllInOneDocument(txt_search.Text.Split(Splitter.Space,
                                                                            StringSplitOptions.RemoveEmptyEntries));
       else if (radio_sent.Checked)
-        results = _quickIndex.SearchAllInOneSentence(txt_search.Text.Split(new[] { " " },
+        results = _quickIndex.SearchAllInOneSentence(txt_search.Text.Split(Splitter.Space,
                                                                            StringSplitOptions.RemoveEmptyEntries));
       watch.Stop();
       var timeSearch = watch.ElapsedMilliseconds;
